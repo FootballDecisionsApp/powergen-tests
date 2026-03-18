@@ -89,6 +89,11 @@ export function ShopHero({
 
       {/* Hero text */}
       <div className="relative px-4 sm:px-8 lg:px-16 pt-14 pb-10">
+        <nav className="flex items-center gap-2 mb-8" aria-label="Breadcrumb">
+          <a href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">Начало</a>
+          <span className="text-white/15 font-mono text-[9px]">/</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">Каталог</span>
+        </nav>
         <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
           <span className="w-7 h-px bg-amber shrink-0" />
           Пълен асортимент

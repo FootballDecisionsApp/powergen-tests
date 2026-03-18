@@ -94,6 +94,11 @@ export default function AboutPage() {
           }}
         />
         <div className="relative px-4 sm:px-8 lg:px-16 py-20 sm:py-24 max-w-screen-xl mx-auto">
+          <nav className="flex items-center gap-2 mb-8" aria-label="Breadcrumb">
+            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">Начало</Link>
+            <span className="text-white/15 font-mono text-[9px]">/</span>
+            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">За нас</span>
+          </nav>
           <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
             Нашата история
