@@ -1,26 +1,222 @@
 @import "tailwindcss";
 
+/* ─── Tailwind v4 Theme ─────────────────────────────────────────────────────── */
+@theme {
+  /* ── Backgrounds ──────────────────────────────────────────────────── */
+  --color-cream:        #F5F0E8;   /* page background — warm cream              */
+  --color-paper:        #FDFCF8;   /* cards, inputs — warm white                */
+  --color-cream-dark:   #EDE8DF;   /* alt sections — deeper cream               */
+  --color-smoke:        #E8E3D8;   /* subtle dividers                           */
+
+  /* ── Navy scale — primary brand dark ─────────────────────────── */
+  --color-navy:         #1B2D4A;   /* primary navy                              */
+  --color-navy-dk:      #101e33;   /* darkest navy — hero, shop hero bg         */
+  --color-navy-lt:      #263d61;   /* lighter navy — hover states               */
+  --color-black:        #1B2D4A;   /* alias for navy (backwards compat)         */
+  --color-charcoal:     #243752;   /* secondary headings                        */
+
+  /* ── Text ─────────────────────────────────────────────────────── */
+  --color-stone:        #5F6879;   /* body text, descriptions                   */
+  --color-dust:         #9098AA;   /* labels, placeholders, disabled            */
+  --color-ash:          #9B9488;   /* warm ash for card spec text               */
+
+  /* ── Borders ──────────────────────────────────────────────────── */
+  --color-border:       #D6DCE8;   /* standard borders                          */
+  --color-border-light: #E4E8F2;   /* subtle dividers                           */
+
+  /* ── Gold — primary accent ────────────────────────────────────── */
+  --color-amber:        #D4A017;   /* CTAs, highlights (PlayCube gold)          */
+  --color-amber-light:  #e8b828;   /* lighter gold for hover                    */
+  --color-amber-dk:     #a87c0f;   /* darker gold                               */
+  --color-amber-wash:   #F7EDCC;   /* amber wash backgrounds                    */
+
+  /* ── Semantic ─────────────────────────────────────────────────── */
+  --color-red:          #C4300A;
+  --color-green:        #2A6E42;
+
+  /* ── Dark sections ────────────────────────────────────────────── */
+  --color-dark:         #101e33;   /* same as navy-dk for dark sections         */
+
+  /* ── Fonts — Bebas Neue display, DM Sans body, DM Mono code ─── */
+  --font-display: var(--font-bebas), 'Arial Black', sans-serif;
+  --font-sans:    var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono:    var(--font-dm-mono), 'Courier New', monospace;
+
+  /* Aliases used in existing components */
+  --font-serif:   var(--font-bebas), 'Arial Black', sans-serif;
+  --font-cond:    var(--font-dm-sans), system-ui, sans-serif;
+}
+
+/* ─── CSS Custom Properties ─────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-amber-dim:   rgba(212, 160, 23, 0.08);
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #F5F0E8;
+  color: #1B2D4A;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
 }
+
+/* ─── Noise Texture Overlay ─────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: #F5F0E8; }
+::-webkit-scrollbar-thumb { background: #D6DCE8; }
+::-webkit-scrollbar-thumb:hover { background: #D4A017; }
+
+/* ─── Keyframe Animations ────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-16px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes lineGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1; }
+}
+
+/* ─── Animation Utilities ────────────────────────────────────────────────────── */
+@utility animate-fade-up {
+  animation: fadeUp 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.75s ease both;
+}
+
+@utility animate-fade-left {
+  animation: fadeLeft 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@utility animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@utility animate-spin-slow {
+  animation: spin 40s linear infinite;
+}
+
+@utility animate-spin-slower {
+  animation: spin 28s linear infinite reverse;
+}
+
+@utility animate-spin-slowest {
+  animation: spin 20s linear infinite;
+}
+
+@utility animate-pulse-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@utility animate-scroll-pulse {
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@utility animate-fade-up-fast {
+  animation: fadeUp 0.45s ease both;
+}
+
+@utility animate-scale-in {
+  animation: scaleIn 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@utility animate-draw-circle {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawPath 0.6s ease-out forwards;
+}
+
+@utility animate-draw-check {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawPath 0.35s ease-out 0.5s both;
+}
+
+
+/* ─── Scroll Reveal ───────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.65s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
