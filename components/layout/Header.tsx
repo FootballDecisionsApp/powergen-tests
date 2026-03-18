@@ -34,7 +34,7 @@ export function Header() {
           <span className="font-display text-[30px] sm:text-[30px] tracking-[0.08em] text-white leading-none transition-colors duration-200 group-hover:text-amber/90">
             PLAYCUBE
           </span>
-          <span className="hidden sm:block font-mono text-[8px] tracking-[0.22em] uppercase text-amber mt-[3px]">
+          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px]">
             By Integrated Energy Systems
           </span>
         </Link>
