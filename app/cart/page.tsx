@@ -6,135 +6,125 @@ import { CartItem } from '@/components/cart/CartItem'
 
 export default function CartPage() {
   const { items, getTotalPrice, getTotalItems } = useCart()
-  const total = getTotalPrice()
+  const total     = getTotalPrice()
   const itemCount = getTotalItems()
+  const freeShip  = total > 5000
 
-  // ── Empty state ───────────────────────────────────────────────────────────
+  // ── Empty state ──────────────────────────────────────────────────────────────
   if (items.length === 0) {
     return (
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <svg
-            className="w-16 h-16 mb-5 text-stone/25"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="0.75"
-          >
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <path d="M16 10a4 4 0 01-8 0" />
+      <main className="min-h-screen bg-navy-dk pt-[72px] flex items-center justify-center">
+        <div className="flex flex-col items-center text-center px-4">
+          <svg className="w-14 h-14 mb-6 text-white/10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.75">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
           </svg>
-          <p className="font-serif font-light text-3xl text-black mb-2">
-            Количката е празна
+          <p className="font-display text-[36px] sm:text-[48px] text-white leading-none mb-3">
+            КОЛИЧКАТА Е<br /><span className="text-amber">ПРАЗНА</span>
           </p>
-          <p className="font-sans font-light text-[14px] text-stone mb-8">
+          <p className="font-sans font-light text-[13px] text-white/35 mb-8">
             Добавете продукти, за да продължите
           </p>
           <Link
             href="/products"
-            className="px-8 min-h-[52px] bg-black text-paper font-cond font-bold text-[12px] tracking-[2.5px] uppercase transition-colors hover:bg-amber flex items-center"
+            className="flex items-center justify-center min-h-[52px] px-8 bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5"
           >
-            Разгледай генераторите
+            Разгледай каталога →
           </Link>
         </div>
-      </div>
+      </main>
     )
   }
 
-  // ── Cart with items ────────────────────────────────────────────────────────
+  // ── Cart with items ──────────────────────────────────────────────────────────
   return (
-    <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
+    <main className="min-h-screen bg-navy-dk pt-[72px]">
 
-      {/* Page heading */}
-      <h1 className="font-serif font-light text-3xl sm:text-4xl text-black mb-8 leading-tight">
-        Количка
-      </h1>
+      {/* ── HERO STRIP ── */}
+      <div className="relative bg-navy-dk border-b border-white/[0.06] overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(212,160,23,1) 1px, transparent 1px), linear-gradient(90deg, rgba(212,160,23,1) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
+        <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-10">
+          <h1 className="font-display text-[40px] sm:text-[52px] leading-[0.92] text-white">
+            КОЛИЧКА <span className="text-amber">({itemCount})</span>
+          </h1>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-12">
+      {/* ── CONTENT ── */}
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-10 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
 
-        {/* ── Left: item list ─────────────────────────────────── */}
-        <div>
-          <div className="border-t border-border">
-            {items.map((item) => (
-              <CartItem key={item.id} item={item} />
-            ))}
-          </div>
-
-          <div className="mt-6">
+          {/* ── LEFT: items ── */}
+          <div>
+            <div className="flex flex-col gap-0 border-t border-white/[0.06]">
+              {items.map((item) => (
+                <CartItem key={item.id} item={item} />
+              ))}
+            </div>
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 font-mono text-[9px] tracking-[1.5px] uppercase text-dust hover:text-stone transition-colors"
+              className="inline-flex items-center gap-2 mt-6 font-mono text-[9px] tracking-[0.15em] uppercase text-white/20 hover:text-white/45 transition-colors"
             >
               <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M10 3L5 8l5 5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10 3L5 8l5 5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Продължи пазаруването
             </Link>
           </div>
-        </div>
 
-        {/* ── Right: order summary ────────────────────────────── */}
-        <div className="lg:sticky lg:top-24 self-start">
-          <div className="bg-paper border border-border p-5 sm:p-6">
-            <h2 className="font-cond font-bold text-[13px] tracking-[2px] uppercase text-black mb-5 pb-4 border-b border-border">
-              Обобщение
-            </h2>
+          {/* ── RIGHT: summary ── */}
+          <div className="lg:sticky lg:top-24 self-start">
+            <div className="bg-navy border border-white/[0.08] p-5 sm:p-6">
 
-            {/* Item count */}
-            <div className="flex items-center justify-between py-3 border-b border-border-light">
-              <span className="font-mono text-[10px] tracking-[1px] uppercase text-stone">
-                Продукти
-              </span>
-              <span className="font-mono text-[12px] text-black">
-                {itemCount}
-              </span>
+              <h2 className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 mb-4 pb-4 border-b border-white/[0.06]">
+                Обобщение
+              </h2>
+
+              <div className="flex items-center justify-between py-2">
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Продукти</span>
+                <span className="font-mono text-[11px] text-white/60">{itemCount} бр.</span>
+              </div>
+
+              <div className="flex items-center justify-between py-2">
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Подтотал</span>
+                <span className="font-mono text-[11px] text-white/60">{total.toLocaleString('bg-BG')} EUR</span>
+              </div>
+
+              <div className="flex items-center justify-between py-2 border-b border-white/[0.06] pb-4 mb-4">
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Доставка</span>
+                <span className={`font-mono text-[10px] ${freeShip ? 'text-amber' : 'text-white/40'}`}>
+                  {freeShip ? 'Безплатно' : 'По договаряне'}
+                </span>
+              </div>
+
+              <div className="flex items-end justify-between mb-5">
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/40">Общо</span>
+                <div className="text-right">
+                  <p className="font-display text-[36px] text-amber leading-none">{total.toLocaleString('bg-BG')}</p>
+                  <p className="font-mono text-[9px] text-white/25 mt-0.5">EUR с ДДС</p>
+                </div>
+              </div>
+
+              <Link
+                href="/checkout"
+                className="flex items-center justify-center w-full min-h-[52px] bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5"
+              >
+                Към поръчката →
+              </Link>
             </div>
-
-            {/* Subtotal */}
-            <div className="flex items-center justify-between py-3 border-b border-border-light">
-              <span className="font-mono text-[10px] tracking-[1px] uppercase text-stone">
-                Подтотал
-              </span>
-              <span className="font-mono text-[12px] text-black">
-                {total.toLocaleString('bg-BG')} EUR
-              </span>
-            </div>
-
-            {/* Shipping */}
-            <div className="flex items-center justify-between py-3 border-b border-border-light">
-              <span className="font-mono text-[10px] tracking-[1px] uppercase text-stone">
-                Доставка
-              </span>
-              <span className="font-mono text-[11px] text-dust">
-                При поръчка
-              </span>
-            </div>
-
-            {/* Total */}
-            <div className="flex items-center justify-between pt-4 pb-1">
-              <span className="font-mono text-[10px] tracking-[1px] uppercase text-black font-semibold">
-                Общо
-              </span>
-              <span className="font-serif text-2xl text-black leading-none">
-                {total.toLocaleString('bg-BG')}{' '}
-                <span className="font-cond text-[13px] text-stone">EUR</span>
-              </span>
-            </div>
-            <p className="font-mono text-[9px] text-dust mb-5">
-              Доставката се изчислява при поръчка
-            </p>
-
-            <Link
-              href="/checkout"
-              className="flex items-center justify-center w-full min-h-[52px] bg-black text-paper font-cond font-bold text-[12px] tracking-[2.5px] uppercase transition-colors hover:bg-amber"
-            >
-              Към поръчката
-            </Link>
           </div>
-        </div>
 
+        </div>
       </div>
-    </div>
+
+    </main>
   )
 }

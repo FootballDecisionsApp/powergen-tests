@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Контакти — PlayCube',
@@ -21,14 +20,7 @@ export default function ContactPage() {
           }}
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-12 sm:py-16">
-          <nav className="flex items-center gap-2 mb-8" aria-label="Breadcrumb">
-            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">
-              Начало
-            </Link>
-            <span className="text-white/15 font-mono text-[9px]">/</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">Контакти</span>
-          </nav>
-          <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
+<p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
             PlayCube · IES
           </p>
