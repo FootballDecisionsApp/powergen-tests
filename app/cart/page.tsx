@@ -46,13 +46,6 @@ export default function CartPage() {
   return (
     <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
 
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 mb-6" aria-label="Breadcrumb">
-        <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-dust hover:text-stone transition-colors">Начало</Link>
-        <span className="text-dust/50 font-mono text-[9px]">/</span>
-        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-stone">Количка</span>
-      </nav>
-
       {/* Page heading */}
       <h1 className="font-serif font-light text-3xl sm:text-4xl text-black mb-8 leading-tight">
         Количка
