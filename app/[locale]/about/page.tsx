@@ -10,35 +10,29 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const milestones = [
-  { year: '2003', text: 'Основаване на Integrated Energy Systems OOD в София.' },
-  { year: '2007', text: 'Първи договор с болничен комплекс — 100+ инсталации за здравеопазването.' },
-  { year: '2012', text: 'Разширяване на портфолиото с инверторни и газови генератори.' },
-  { year: '2016', text: 'ISO 9001 сертификация и отваряне на сервизен хъб в Пловдив.' },
-  { year: '2020', text: 'Дигитализация на поддръжката — 24/7 отдалечено наблюдение на агрегатите.' },
-  { year: '2024', text: 'Над 500 активни инсталации в 12 държави от региона.' },
-]
-
-const team = [
-  { name: 'Иван Петров', role: 'Управляващ директор', exp: '22г. опит' },
-  { name: 'Мария Димитрова', role: 'Технически директор', exp: 'MSc Електроинженеринг' },
-  { name: 'Георги Стоянов', role: 'Ръководител сервиз', exp: '18г. опит' },
-  { name: 'Елена Николова', role: 'Търговски директор', exp: '12г. опит' },
-]
-
-const industries = [
-  'Здравеопазване',
-  'Телекомуникации',
-  'Строителство',
-  'Промишленост',
-  'Хотелиерство',
-  'Земеделие',
-  'Центрове за данни',
-  'Обществен сектор',
-]
-
 export default async function AboutPage() {
   const t = await getTranslations('about')
+
+  const milestones = [
+    { year: '2003', text: t('milestone2003') },
+    { year: '2007', text: t('milestone2007') },
+    { year: '2012', text: t('milestone2012') },
+    { year: '2016', text: t('milestone2016') },
+    { year: '2020', text: t('milestone2020') },
+    { year: '2024', text: t('milestone2024') },
+  ]
+
+  const team = [
+    { name: t('team1Name'), role: t('team1Role'), exp: t('team1Exp') },
+    { name: t('team2Name'), role: t('team2Role'), exp: t('team2Exp') },
+    { name: t('team3Name'), role: t('team3Role'), exp: t('team3Exp') },
+    { name: t('team4Name'), role: t('team4Role'), exp: t('team4Exp') },
+  ]
+
+  const industries = [
+    t('industry1'), t('industry2'), t('industry3'), t('industry4'),
+    t('industry5'), t('industry6'), t('industry7'), t('industry8'),
+  ]
 
   const valueItems = [
     {

@@ -27,7 +27,7 @@ export async function Footer() {
       links: [
         { label: '+359 889 57 19 51', href: 'tel:+359889571951' as const },
         { label: 'ies@playcube.com', href: 'mailto:ies@playcube.com' as const },
-        { label: 'ул. Строител 1, Западна индустриална зона, Плевен', href: '/contact' as const },
+        { label: `${t('address3')}, ${t('address2')}, ${t('address1')}`, href: '/contact' as const },
       ],
     },
   ]

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Bebas_Neue, DM_Sans, DM_Mono } from 'next/font/google'
+import { Oswald, DM_Sans, DM_Mono } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -9,22 +9,22 @@ import { Footer } from '@/components/layout/Footer'
 import { Cursor } from '@/components/ui/Cursor'
 import '@/app/globals.css'
 
-const bebas = Bebas_Neue({
-  subsets: ['latin'],
-  weight: '400',
+const oswald = Oswald({
+  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-bebas',
   display: 'swap',
 })
 
 const dmSans = DM_Sans({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-dm-sans',
   display: 'swap',
 })
 
 const dmMono = DM_Mono({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
   weight: ['300', '400', '500'],
   variable: '--font-dm-mono',
   display: 'swap',
@@ -55,7 +55,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={`${bebas.variable} ${dmSans.variable} ${dmMono.variable}`}>
+    <html lang={locale} className={`${oswald.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body className="antialiased">
         <NextIntlClientProvider messages={messages}>
           <Cursor />

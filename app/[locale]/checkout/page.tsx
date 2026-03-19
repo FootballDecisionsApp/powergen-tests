@@ -162,7 +162,7 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
                   <FormField label={t('fieldName')} error={errors.name?.message} required>
-                    <input {...register('name')} placeholder="Иван Иванов" aria-invalid={errors.name ? 'true' : 'false'} className={inputClass}/>
+                    <input {...register('name')} placeholder={t('placeholderName')} aria-invalid={errors.name ? 'true' : 'false'} className={inputClass}/>
                   </FormField>
                 </div>
 
@@ -176,12 +176,12 @@ export default function CheckoutPage() {
 
                 <div className="sm:col-span-2">
                   <FormField label={t('fieldAddress')} error={errors.address?.message} required>
-                    <input {...register('address')} placeholder="ул. Граф Игнатиев 15" aria-invalid={errors.address ? 'true' : 'false'} className={inputClass}/>
+                    <input {...register('address')} placeholder={t('placeholderAddress')} aria-invalid={errors.address ? 'true' : 'false'} className={inputClass}/>
                   </FormField>
                 </div>
 
                 <FormField label={t('fieldCity')} error={errors.city?.message} required>
-                  <input {...register('city')} placeholder="София" aria-invalid={errors.city ? 'true' : 'false'} className={inputClass}/>
+                  <input {...register('city')} placeholder={t('placeholderCity')} aria-invalid={errors.city ? 'true' : 'false'} className={inputClass}/>
                 </FormField>
 
                 <FormField label={t('fieldPostalCode')} error={errors.postalCode?.message} required>
