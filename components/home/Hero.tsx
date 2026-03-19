@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 
 export function Hero() {
+  const t = useTranslations('hero')
   const ring1Ref = useRef<HTMLDivElement>(null)
   const ring2Ref = useRef<HTMLDivElement>(null)
   const ring3Ref = useRef<HTMLDivElement>(null)
@@ -61,13 +63,13 @@ export function Hero() {
       {/* ── LEFT COLUMN ── */}
       <div className="relative z-10 flex flex-col justify-center px-4 sm:px-8 lg:px-12 xl:px-16 py-14 lg:pt-10 lg:pb-20 min-w-0">
 
-        {/* Eyebrow — tight gap above the title */}
+        {/* Eyebrow */}
         <p
           className="flex items-center gap-3 mb-5 font-mono text-[9px] tracking-[0.25em] uppercase text-amber animate-fade-up"
           style={{ animationDelay: '0.05s' }}
         >
           <span className="w-8 h-px bg-amber shrink-0" />
-          <span className="whitespace-nowrap">Енергийна Сигурност · Since 2003</span>
+          <span className="whitespace-nowrap">{t('eyebrow')}</span>
         </p>
 
         {/* H1 — Bebas Neue */}
@@ -75,10 +77,10 @@ export function Hero() {
           className="font-display leading-[0.92] tracking-[-0.01em] mb-7 animate-fade-up"
           style={{ animationDelay: '0.15s' }}
         >
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">НАДЕЖДНА</span>
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-amber  uppercase">МОЩНОСТ</span>
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">КОГАТО Е</span>
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">НУЖНА</span>
+          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line1')}</span>
+          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-amber  uppercase">{t('line2')}</span>
+          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line3')}</span>
+          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line4')}</span>
         </h1>
 
         {/* Subtitle */}
@@ -86,7 +88,7 @@ export function Hero() {
           className="font-sans font-light text-[13px] sm:text-[14px] text-white/50 max-w-[380px] mb-8 leading-relaxed animate-fade-up"
           style={{ animationDelay: '0.3s' }}
         >
-          Промишлени генератори с доказана надеждност. Проектирани за критична инфраструктура, промишлени обекти и аварийно захранване.
+          {t('subtitle')}
         </p>
 
         {/* CTA buttons */}
@@ -98,13 +100,13 @@ export function Hero() {
             href="/products"
             className="flex items-center justify-center px-6 lg:px-7 xl:px-8 py-4 bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase min-h-[52px] transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(212,160,23,0.25)]"
           >
-            Разгледай каталога →
+            {t('ctaCatalog')}
           </Link>
           <Link
             href="/contact"
             className="flex items-center justify-center gap-2 px-6 lg:px-7 xl:px-8 py-4 border-b border-white/20 text-white/55 font-mono text-[11px] tracking-[0.18em] uppercase min-h-[52px] transition-all duration-200 hover:text-white hover:border-white/50"
           >
-            Вземи оферта
+            {t('ctaQuote')}
           </Link>
         </div>
 
@@ -114,9 +116,9 @@ export function Hero() {
           style={{ animationDelay: '0.5s' }}
         >
           {[
-            { num: '500+', label: 'Инсталации' },
-            { num: '20г', label: 'Опит' },
-            { num: '5–2000', label: 'kW обхват' },
+            { num: t('stat1Num'), label: t('stat1Label') },
+            { num: t('stat2Num'), label: t('stat2Label') },
+            { num: '5–2000', label: t('stat3Label') },
           ].map((stat, i) => (
             <div key={stat.label} className={`flex flex-col py-5 pr-6 lg:pr-7 xl:pr-8 ${i > 0 ? 'pl-6 lg:pl-7 xl:pl-8 border-l border-amber/[0.12]' : ''}`}>
               <span className="font-display text-[34px] text-amber leading-none tracking-[0.02em] mb-1">
@@ -235,9 +237,9 @@ export function Hero() {
         {/* Data labels — xl only, bottom-right of right column */}
         <div className="hidden xl:flex absolute bottom-12 right-10 flex-col gap-4">
           {[
-            { key: 'Защита', val: 'CE · ISO 9001' },
-            { key: 'Мощност', val: '5–2000 kW' },
-            { key: 'Гаранция', val: '24 МЕС' },
+            { key: t('specProtection'), val: 'CE · ISO 9001' },
+            { key: t('specPower'), val: '5–2000 kW' },
+            { key: t('specWarranty'), val: t('specWarrantyVal') },
           ].map(({ key, val }) => (
             <div key={key}>
               <p className="font-mono text-[8px] tracking-[0.25em] uppercase text-white/20">{key}</p>
@@ -251,7 +253,7 @@ export function Hero() {
           className="hidden xl:block absolute top-1/2 right-3 font-mono text-[8px] tracking-[0.35em] uppercase text-amber/20 whitespace-nowrap"
           style={{ transform: 'translateY(-50%) rotate(90deg)', transformOrigin: 'center' }}
         >
-          Сигурна Енергия · Висока Ефективност
+          {t('badgeSecurity')}
         </p>
       </div>
 
@@ -264,7 +266,7 @@ export function Hero() {
           className="w-px h-12 animate-scroll-pulse"
           style={{ background: 'linear-gradient(to bottom, transparent, #D4A017)' }}
         />
-        <p className="font-mono text-[9px] tracking-[0.3em] uppercase text-amber/40 [writing-mode:vertical-rl]">Scroll</p>
+        <p className="font-mono text-[9px] tracking-[0.3em] uppercase text-amber/40 [writing-mode:vertical-rl]">{t('scrollHint')}</p>
       </div>
 
     </section>

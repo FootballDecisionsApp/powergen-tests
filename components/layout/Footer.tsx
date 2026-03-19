@@ -1,34 +1,37 @@
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/lib/navigation'
 
-const navColumns = [
-  {
-    title: 'Продукти',
-    links: [
-      { label: 'Всички генератори', href: '/products' },
-      { label: 'Дизелови', href: '/products?fuelType=diesel' },
-      { label: 'Инверторни', href: '/products?fuelType=inverter' },
-      { label: 'Газови', href: '/products?fuelType=gas' },
-    ],
-  },
-  {
-    title: 'Компания',
-    links: [
-      { label: 'Начало', href: '/' },
-      { label: 'Каталог', href: '/products' },
-      { label: 'Контакти', href: '/contact' },
-    ],
-  },
-  {
-    title: 'Контакти',
-    links: [
-      { label: '+359 889 57 19 51', href: 'tel:+359889571951' },
-      { label: 'ies@playcube.com', href: 'mailto:ies@playcube.com' },
-      { label: 'ул. Строител 1, Западна индустриална зона, Плевен', href: '/contact' },
-    ],
-  },
-]
+export async function Footer() {
+  const t = await getTranslations('footer')
 
-export function Footer() {
+  const navColumns = [
+    {
+      title: t('products'),
+      links: [
+        { label: t('allGenerators'), href: '/products' as const },
+        { label: t('diesel'), href: '/products' as const, query: '?fuelType=diesel' },
+        { label: t('inverter'), href: '/products' as const, query: '?fuelType=inverter' },
+        { label: t('gas'), href: '/products' as const, query: '?fuelType=gas' },
+      ],
+    },
+    {
+      title: t('company'),
+      links: [
+        { label: t('home'), href: '/' as const },
+        { label: t('catalog'), href: '/products' as const },
+        { label: t('contact'), href: '/contact' as const },
+      ],
+    },
+    {
+      title: t('contact'),
+      links: [
+        { label: '+359 889 57 19 51', href: 'tel:+359889571951' as const },
+        { label: 'ies@playcube.com', href: 'mailto:ies@playcube.com' as const },
+        { label: 'ул. Строител 1, Западна индустриална зона, Плевен', href: '/contact' as const },
+      ],
+    },
+  ]
+
   return (
     <footer className="relative bg-navy-dk text-white/35 px-4 sm:px-8 lg:px-16 pt-16 pb-8 overflow-hidden">
 
@@ -64,7 +67,7 @@ export function Footer() {
             </span>
           </Link>
           <p className="font-sans font-light text-[13px] leading-relaxed mb-6 max-w-[240px] text-white/30">
-            Промишлени генератори с доказана надеждност за критична инфраструктура и бизнес приложения.
+            {t('tagline')}
           </p>
           <div className="flex flex-col gap-1.5">
             <a href="tel:+359889571951" className="font-mono text-[10px] tracking-[0.12em] text-white/25 hover:text-amber transition-colors duration-200">
@@ -85,12 +88,21 @@ export function Footer() {
             <ul className="flex flex-col gap-3">
               {col.links.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="font-sans font-light text-[13px] text-white/30 hover:text-white/65 transition-colors duration-150 inline-block"
-                  >
-                    {link.label}
-                  </Link>
+                  {'query' in link ? (
+                    <a
+                      href={`${link.href}${(link as { query?: string }).query ?? ''}`}
+                      className="font-sans font-light text-[13px] text-white/30 hover:text-white/65 transition-colors duration-150 inline-block"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="font-sans font-light text-[13px] text-white/30 hover:text-white/65 transition-colors duration-150 inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -101,17 +113,21 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="relative flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <p className="font-mono text-[10px] tracking-[0.12em] text-white/20">
-          © 2026 PlayCube · Integrated Energy Systems OOD · All rights reserved
+          {t('copyright')}
         </p>
         <div className="flex items-center gap-5">
-          {['Поверителност', 'Бисквитки', 'Условия'].map((label) => (
-            <Link
-              key={label}
+          {[
+            { key: 'privacy', label: t('privacy') },
+            { key: 'cookies', label: t('cookies') },
+            { key: 'terms', label: t('terms') },
+          ].map(({ key, label }) => (
+            <a
+              key={key}
               href="#"
               className="font-mono text-[10px] tracking-[0.12em] text-white/20 hover:text-white/45 transition-colors duration-150"
             >
               {label}
-            </Link>
+            </a>
           ))}
         </div>
       </div>

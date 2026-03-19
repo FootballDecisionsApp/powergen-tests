@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
 import { CartItem } from './CartItem'
 
 export function CartDrawer() {
+  const t = useTranslations('cart')
   const { items, isCartOpen, closeCart, getTotalPrice, getTotalItems } = useCart()
   const total     = getTotalPrice()
   const itemCount = getTotalItems()
@@ -37,7 +39,7 @@ export function CartDrawer() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Количка"
+        aria-label={t('drawerLabel')}
         className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[420px] bg-navy flex flex-col border-l border-white/[0.08] transition-transform duration-300 ease-out ${
           isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -46,7 +48,7 @@ export function CartDrawer() {
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 border-b border-white/[0.08] flex-shrink-0">
           <div className="flex items-center gap-3">
             <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-white/60">
-              Количка
+              {t('drawerLabel')}
             </span>
             {itemCount > 0 && (
               <span className="w-5 h-5 bg-amber text-navy-dk font-mono text-[10px] font-bold flex items-center justify-center">
@@ -56,7 +58,7 @@ export function CartDrawer() {
           </div>
           <button
             onClick={closeCart}
-            aria-label="Затвори количката"
+            aria-label={t('drawerClose')}
             className="w-10 h-10 flex items-center justify-center text-white/30 hover:text-white transition-colors"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -75,17 +77,17 @@ export function CartDrawer() {
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
               <p className="font-display text-[28px] text-white leading-none mb-2">
-                КОЛИЧКАТА Е<br /><span className="text-amber">ПРАЗНА</span>
+                {t('emptyHeading1')}<br /><span className="text-amber">{t('emptyHeadingAccent')}</span>
               </p>
               <p className="font-sans font-light text-[13px] text-white/30 mb-8">
-                Добавете продукти, за да продължите
+                {t('emptySubtitle')}
               </p>
               <Link
                 href="/products"
                 onClick={closeCart}
                 className="flex items-center justify-center min-h-[44px] px-7 bg-amber text-navy-dk font-mono font-medium text-[10px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light"
               >
-                Разгледай каталога →
+                {t('emptyCta')}
               </Link>
             </div>
           ) : (
@@ -101,13 +103,13 @@ export function CartDrawer() {
         {items.length > 0 && (
           <div className="flex-shrink-0 border-t border-white/[0.08] p-4 sm:p-6">
             <div className="flex items-end justify-between mb-1">
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/30">Общо</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/30">{t('labelTotal')}</span>
               <div className="text-right">
                 <span className="font-display text-[30px] text-amber leading-none">{total.toLocaleString('bg-BG')}</span>
                 <span className="font-mono text-[9px] text-white/25 ml-1">EUR</span>
               </div>
             </div>
-            <p className="font-mono text-[9px] text-white/20 mb-5">Доставката се изчислява при поръчка</p>
+            <p className="font-mono text-[9px] text-white/20 mb-5">{t('shippingNote')}</p>
 
             <div className="flex flex-col gap-2">
               <Link
@@ -115,13 +117,13 @@ export function CartDrawer() {
                 onClick={closeCart}
                 className="w-full min-h-[52px] bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light flex items-center justify-center"
               >
-                Към поръчката →
+                {t('checkout')}
               </Link>
               <button
                 onClick={closeCart}
                 className="w-full min-h-[44px] font-mono text-[10px] tracking-[0.15em] uppercase text-white/20 hover:text-white/45 transition-colors"
               >
-                Продължи пазаруването
+                {t('continueShopping')}
               </button>
             </div>
           </div>

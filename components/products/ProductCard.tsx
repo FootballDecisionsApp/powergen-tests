@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 import type { IProduct } from '@/types'
 import { useCart } from '@/lib/store/cart'
 
@@ -10,22 +11,23 @@ interface ProductCardProps {
   product: IProduct
 }
 
-const fuelLabel: Record<IProduct['fuelType'], string> = {
-  diesel:   'Дизел',
-  petrol:   'Бензин',
-  gas:      'Газ',
-  inverter: 'Инвертор',
-}
-
-const phaseLabel: Record<NonNullable<IProduct['phases']>, string> = {
-  '1phase': '1 фаза',
-  '3phase': '3 фази',
-}
-
 export function ProductCard({ product }: ProductCardProps) {
+  const t = useTranslations('productCard')
   const [justAdded, setJustAdded] = useState(false)
   const { addItem } = useCart()
-  const href = `/products/${product.slug.current}`
+  const href = `/products/${product.slug.current}` as const
+
+  const fuelLabel: Record<IProduct['fuelType'], string> = {
+    diesel:   'Дизел',
+    petrol:   'Бензин',
+    gas:      'Газ',
+    inverter: 'Инвертор',
+  }
+
+  const phaseLabel: Record<NonNullable<IProduct['phases']>, string> = {
+    '1phase': '1 фаза',
+    '3phase': '3 фази',
+  }
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -74,18 +76,18 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Badges */}
           {product.featured && (
             <span className="absolute top-4 right-4 px-2 py-0.5 bg-amber/20 border border-amber/40 text-amber font-mono text-[8px] tracking-[0.2em] uppercase">
-              ТОП
+              {t('topBadge')}
             </span>
           )}
           {!product.inStock && (
             <span className="absolute top-4 right-4 px-2 py-0.5 bg-black/60 text-white/60 font-mono text-[8px] tracking-[0.15em] uppercase">
-              Изчерпан
+              {t('outOfStock')}
             </span>
           )}
 
           {/* Hover ribbon */}
           <div className="absolute bottom-0 left-0 right-0 bg-amber py-2.5 text-center font-mono text-[10px] tracking-[0.2em] uppercase text-navy-dk font-medium translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
-            Виж детайли
+            {t('viewProduct')}
           </div>
         </div>
       </Link>
@@ -136,8 +138,8 @@ export function ProductCard({ product }: ProductCardProps) {
             <button
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              aria-label={`Добави ${product.name} в количката`}
-              title="Добави в количката"
+              aria-label={`${t('addToCart')} ${product.name}`}
+              title={t('addToCart')}
               className={`w-9 h-9 flex items-center justify-center transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
                 justAdded
                   ? 'bg-green-700 text-white'
@@ -160,8 +162,8 @@ export function ProductCard({ product }: ProductCardProps) {
             {/* View product */}
             <Link
               href={href}
-              aria-label={`Виж ${product.name}`}
-              title="Виж продукта"
+              aria-label={`${t('viewProduct')} ${product.name}`}
+              title={t('viewProduct')}
               className="w-9 h-9 flex items-center justify-center bg-smoke text-ash hover:bg-navy hover:text-white transition-all duration-200"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

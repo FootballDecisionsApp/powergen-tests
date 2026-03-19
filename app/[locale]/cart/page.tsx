@@ -1,10 +1,12 @@
 'use client'
 
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
 import { CartItem } from '@/components/cart/CartItem'
 
 export default function CartPage() {
+  const t = useTranslations('cart')
   const { items, getTotalPrice, getTotalItems } = useCart()
   const total     = getTotalPrice()
   const itemCount = getTotalItems()
@@ -21,16 +23,16 @@ export default function CartPage() {
             <path d="M16 10a4 4 0 01-8 0"/>
           </svg>
           <p className="font-display text-[36px] sm:text-[48px] text-white leading-none mb-3">
-            КОЛИЧКАТА Е<br /><span className="text-amber">ПРАЗНА</span>
+            {t('emptyHeading1')}<br /><span className="text-amber">{t('emptyHeadingAccent')}</span>
           </p>
           <p className="font-sans font-light text-[13px] text-white/35 mb-8">
-            Добавете продукти, за да продължите
+            {t('emptySubtitle')}
           </p>
           <Link
             href="/products"
             className="flex items-center justify-center min-h-[52px] px-8 bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5"
           >
-            Разгледай каталога →
+            {t('emptyCta')}
           </Link>
         </div>
       </main>
@@ -53,7 +55,7 @@ export default function CartPage() {
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-10">
           <h1 className="font-display text-[40px] sm:text-[52px] leading-[0.92] text-white">
-            КОЛИЧКА <span className="text-amber">({itemCount})</span>
+            {t('pageHeading')} <span className="text-amber">({itemCount})</span>
           </h1>
         </div>
       </div>
@@ -76,7 +78,7 @@ export default function CartPage() {
               <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M10 3L5 8l5 5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              Продължи пазаруването
+              {t('continueShopping')}
             </Link>
           </div>
 
@@ -85,31 +87,31 @@ export default function CartPage() {
             <div className="bg-navy border border-white/[0.08] p-5 sm:p-6">
 
               <h2 className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 mb-4 pb-4 border-b border-white/[0.06]">
-                Обобщение
+                {t('summary')}
               </h2>
 
               <div className="flex items-center justify-between py-2">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Продукти</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">{t('labelProducts')}</span>
                 <span className="font-mono text-[11px] text-white/60">{itemCount} бр.</span>
               </div>
 
               <div className="flex items-center justify-between py-2">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Подтотал</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">{t('labelSubtotal')}</span>
                 <span className="font-mono text-[11px] text-white/60">{total.toLocaleString('bg-BG')} EUR</span>
               </div>
 
               <div className="flex items-center justify-between py-2 border-b border-white/[0.06] pb-4 mb-4">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Доставка</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">{t('labelShipping')}</span>
                 <span className={`font-mono text-[10px] ${freeShip ? 'text-amber' : 'text-white/40'}`}>
-                  {freeShip ? 'Безплатно' : 'По договаряне'}
+                  {freeShip ? t('shippingFree') : t('shippingNegotiated')}
                 </span>
               </div>
 
               <div className="flex items-end justify-between mb-5">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/40">Общо</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/40">{t('labelTotal')}</span>
                 <div className="text-right">
                   <p className="font-display text-[36px] text-amber leading-none">{total.toLocaleString('bg-BG')}</p>
-                  <p className="font-mono text-[9px] text-white/25 mt-0.5">EUR с ДДС</p>
+                  <p className="font-mono text-[9px] text-white/25 mt-0.5">{t('priceWithVat')}</p>
                 </div>
               </div>
 
@@ -117,7 +119,7 @@ export default function CartPage() {
                 href="/checkout"
                 className="flex items-center justify-center w-full min-h-[52px] bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5"
               >
-                Към поръчката →
+                {t('checkout')}
               </Link>
             </div>
           </div>

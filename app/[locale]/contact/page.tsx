@@ -1,11 +1,17 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Контакти — PlayCube',
-  description: 'Свържете се с PlayCube — Integrated Energy Systems. Гр. Плевен, Западна индустриална зона, ул. „Строител" № 1. Тел: +359 889 57 19 51.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata')
+  return {
+    title: t('contactTitle'),
+    description: t('contactDescription'),
+  }
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const t = await getTranslations('contact')
+
   return (
     <main className="min-h-screen bg-navy-dk pt-[72px]">
 
@@ -20,13 +26,13 @@ export default function ContactPage() {
           }}
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-12 sm:py-16">
-<p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
+          <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
-            PlayCube · IES
+            {t('eyebrow')}
           </p>
           <h1 className="font-display text-[52px] sm:text-[72px] lg:text-[88px] leading-[0.92] text-white">
-            СВЪРЖЕТЕ СЕ<br />
-            <span className="text-amber">С НАС</span>
+            {t('heading1')}<br />
+            <span className="text-amber">{t('headingAccent')}</span>
           </h1>
         </div>
       </section>
@@ -50,10 +56,10 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">Местоположение</p>
-                  <p className="font-sans text-[14px] text-white/80 leading-relaxed">Гр. Плевен</p>
-                  <p className="font-sans text-[13px] text-white/40 leading-relaxed">Западна индустриална зона</p>
-                  <p className="font-sans text-[13px] text-white/40 leading-relaxed">ул. „Строител" № 1</p>
+                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">{t('labelLocation')}</p>
+                  <p className="font-sans text-[14px] text-white/80 leading-relaxed">{t('address1')}</p>
+                  <p className="font-sans text-[13px] text-white/40 leading-relaxed">{t('address2')}</p>
+                  <p className="font-sans text-[13px] text-white/40 leading-relaxed">{t('address3')}</p>
                 </div>
               </div>
 
@@ -66,7 +72,7 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">Телефон</p>
+                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">{t('labelPhone')}</p>
                   <p className="font-sans text-[15px] text-white/80 group-hover:text-amber transition-colors duration-200">+359 889 57 19 51</p>
                 </div>
               </a>
@@ -81,7 +87,7 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">Имейл</p>
+                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber mb-2">{t('labelEmail')}</p>
                   <p className="font-sans text-[15px] text-white/80 group-hover:text-amber transition-colors duration-200">ies@playcube.com</p>
                 </div>
               </a>
@@ -89,21 +95,21 @@ export default function ContactPage() {
             </div>
 
             <p className="mt-8 font-mono text-[9px] tracking-[0.2em] uppercase text-white/20">
-              Пон – Пет · 09:00 – 18:00
+              {t('workingHours')}
             </p>
           </div>
 
           {/* RIGHT — Google Maps */}
           <div className="h-[360px] sm:h-[460px] lg:h-auto lg:min-h-[560px] relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d623.8!2d24.5911097!3d43.4337967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40ab8b11fd708857%3A0x9c4bbae88f0d267d!2z0J3QvtCyINCi0YPRgCIg0JXQntCe0JQ!5e0!3m2!1sen!2sbg!4v1"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d623.8!2d24.5911097!3d43.4337967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40ab8b11fd708857%3A0x9c4bbae88f0d267d!2z0J3QvtCyINGC0YPRgCIg0JXQntCe0JQ!5e0!3m2!1sen!2sbg!4v1"
               width="100%"
               height="100%"
               style={{ border: 0, position: 'absolute', inset: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="PlayCube — карта"
+              title={t('mapTitle')}
             />
           </div>
 
@@ -113,8 +119,8 @@ export default function ContactPage() {
       {/* ── CTA ── */}
       <section className="bg-amber mt-12 px-4 sm:px-8 lg:px-16 py-14 sm:py-16 flex flex-col sm:flex-row items-center justify-between gap-6">
         <h2 className="font-display text-[32px] sm:text-[44px] leading-[0.93] text-navy-dk">
-          НУЖЕН ВИ Е<br />
-          <span className="text-navy/60">БЪРЗ ОТГОВОР?</span>
+          {t('ctaHeading1')}<br />
+          <span className="text-navy/60">{t('ctaHeading2')}</span>
         </h2>
         <a
           href="tel:+359889571951"

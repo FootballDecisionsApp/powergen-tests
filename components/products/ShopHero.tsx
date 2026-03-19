@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/lib/navigation'
 
 interface ShopHeroProps {
   currentFuelType: string
@@ -10,21 +11,6 @@ interface ShopHeroProps {
   currentInStock: boolean
   productCount: number
 }
-
-const fuelTypes = [
-  { value: '',         label: 'Всички' },
-  { value: 'diesel',   label: 'Дизел' },
-  { value: 'gas',      label: 'Газ' },
-  { value: 'inverter', label: 'Инвертор' },
-  { value: 'petrol',   label: 'Бензин' },
-]
-
-const powerRanges = [
-  { value: '',        label: 'Всички', min: 0, max: 9999 },
-  { value: 'small',   label: 'До 10 kW', min: 0, max: 10 },
-  { value: 'medium',  label: '10–50 kW', min: 10, max: 50 },
-  { value: 'large',   label: '50+ kW', min: 50, max: 9999 },
-]
 
 function getPowerKey(minKW: number, maxKW: number) {
   if (minKW === 0 && maxKW === 9999) return ''
@@ -41,7 +27,23 @@ export function ShopHero({
   currentInStock,
   productCount,
 }: ShopHeroProps) {
+  const t = useTranslations('products')
   const router = useRouter()
+
+  const fuelTypes = [
+    { value: '',         label: t('fuelAll') },
+    { value: 'diesel',   label: t('fuelDiesel') },
+    { value: 'gas',      label: t('fuelGas') },
+    { value: 'inverter', label: t('fuelInverter') },
+    { value: 'petrol',   label: t('fuelPetrol') },
+  ]
+
+  const powerRanges = [
+    { value: '',        label: t('powerAll'), min: 0, max: 9999 },
+    { value: 'small',   label: t('powerSmall'), min: 0, max: 10 },
+    { value: 'medium',  label: t('powerMedium'), min: 10, max: 50 },
+    { value: 'large',   label: t('powerLarge'), min: 50, max: 9999 },
+  ]
 
   const push = useCallback(
     (patch: Record<string, string | number | boolean | undefined>) => {
@@ -89,16 +91,16 @@ export function ShopHero({
 
       {/* Hero text */}
       <div className="relative px-4 sm:px-8 lg:px-16 pt-14 pb-10">
-<p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
+        <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
           <span className="w-7 h-px bg-amber shrink-0" />
-          Пълен асортимент
+          {t('eyebrow')}
         </p>
         <h1 className="font-display text-[48px] sm:text-[64px] lg:text-[80px] leading-[0.9] text-white tracking-[-0.01em]">
-          КАТАЛОГ<br />
-          <span className="text-amber">ГЕНЕРАТОРИ</span>
+          {t('heading1')}<br />
+          <span className="text-amber">{t('heading2')}</span>
         </h1>
         <p className="mt-4 font-sans font-light text-[13px] text-white/40 tracking-[0.05em]">
-          Дизелови · Газови · Инверторни · 5 kW — 2000 kW
+          {t('subtitle')}
         </p>
       </div>
 
@@ -109,7 +111,7 @@ export function ShopHero({
           {/* Fuel type filter */}
           <div className="flex items-center gap-5 py-4 pr-8 border-r border-white/[0.06]">
             <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 whitespace-nowrap shrink-0">
-              Тип гориво
+              {t('filterFuelType')}
             </span>
             <div className="flex items-center gap-2">
               {fuelTypes.map(({ value, label }) => (
@@ -131,7 +133,7 @@ export function ShopHero({
           {/* Power range filter */}
           <div className="flex items-center gap-5 py-4 px-8 border-r border-white/[0.06]">
             <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 whitespace-nowrap shrink-0">
-              Мощност
+              {t('filterPower')}
             </span>
             <div className="flex items-center gap-2">
               {powerRanges.map(({ value, label, min, max }) => (
@@ -165,7 +167,7 @@ export function ShopHero({
                   <path d="M1.5 6l3 3 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               )}
-              В наличност
+              {t('filterInStock')}
             </button>
 
             {/* Reset */}
@@ -174,7 +176,7 @@ export function ShopHero({
                 onClick={() => router.push('/products')}
                 className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/25 hover:text-white/50 transition-colors duration-150"
               >
-                Изчисти
+                {t('filterReset')}
               </button>
             )}
           </div>
@@ -185,10 +187,10 @@ export function ShopHero({
       {/* Toolbar: count */}
       <div className="bg-cream px-4 sm:px-8 lg:px-16 py-4 border-b border-smoke flex items-center justify-between">
         <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-ash">
-          {productCount} {productCount === 1 ? 'продукт' : 'продукта'}
+          {productCount} {productCount === 1 ? t('countSingular') : t('countPlural')}
         </span>
         <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-dust">
-          По мощност ↑
+          {t('sortByPower')}
         </span>
       </div>
     </div>

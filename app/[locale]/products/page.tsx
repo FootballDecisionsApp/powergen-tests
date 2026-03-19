@@ -1,13 +1,17 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { sanityFetch } from '@/lib/sanity/client'
 import { filteredProductsQuery, allProductsQuery } from '@/lib/sanity/queries'
 import type { IProduct } from '@/types'
 import { ProductGrid } from '@/components/products/ProductGrid'
 import { ShopHero } from '@/components/products/ShopHero'
 
-export const metadata: Metadata = {
-  title: 'Генератори — PlayCube',
-  description: 'Промишлени дизелови, газови и инверторни генератори 5kW–2MW. Филтрирайте по мощност и тип.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata')
+  return {
+    title: t('productsTitle'),
+    description: t('productsDescription'),
+  }
 }
 
 interface SearchParams {

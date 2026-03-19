@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect }   from 'react'
-import { useRouter }              from 'next/navigation'
+import { useTranslations }        from 'next-intl'
+import { useRouter }              from '@/lib/navigation'
+import { Link }                   from '@/lib/navigation'
 import { useForm }                from 'react-hook-form'
 import { zodResolver }            from '@hookform/resolvers/zod'
 import Image                      from 'next/image'
-import Link                       from 'next/link'
 import { useCart }                from '@/lib/store/cart'
 import { OrderCustomerSchema, type TOrderCustomer } from '@/lib/schemas/order'
 
@@ -39,35 +40,35 @@ const inputClass =
 
 // ─── Stepper ─────────────────────────────────────────────────────────────────
 
-function Stepper() {
+function Stepper({ labels }: { labels: { cart: string; details: string; confirm: string } }) {
   return (
     <div className="flex items-center gap-0 mt-6 mb-10">
-      {/* Step 1 — Количка (done) */}
+      {/* Step 1 — Cart (done) */}
       <div className="flex items-center gap-2 shrink-0">
         <div className="w-6 h-6 bg-amber/20 border border-amber/40 flex items-center justify-center">
           <svg className="w-3 h-3 text-amber" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M2 6l3 3 5-5"/>
           </svg>
         </div>
-        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-amber/50">Количка</span>
+        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-amber/50">{labels.cart}</span>
       </div>
       <div className="flex-1 h-px bg-white/[0.06] mx-3" />
 
-      {/* Step 2 — Данни (active) */}
+      {/* Step 2 — Details (active) */}
       <div className="flex items-center gap-2 shrink-0">
         <div className="w-6 h-6 bg-amber flex items-center justify-center">
           <span className="font-mono text-[9px] font-bold text-navy-dk">2</span>
         </div>
-        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-amber">Данни</span>
+        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-amber">{labels.details}</span>
       </div>
       <div className="flex-1 h-px bg-white/[0.06] mx-3" />
 
-      {/* Step 3 — Потвърждение (pending) */}
+      {/* Step 3 — Confirm (pending) */}
       <div className="flex items-center gap-2 shrink-0">
         <div className="w-6 h-6 border border-white/[0.1] flex items-center justify-center">
           <span className="font-mono text-[9px] text-white/20">3</span>
         </div>
-        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-white/20">Потвърждение</span>
+        <span className="hidden sm:inline font-mono text-[9px] tracking-[0.15em] uppercase text-white/20">{labels.confirm}</span>
       </div>
     </div>
   )
@@ -76,6 +77,7 @@ function Stepper() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
+  const t = useTranslations('checkout')
   const router  = useRouter()
   const { items, getTotalPrice, clearCart } = useCart()
   const [mounted,  setMounted]  = useState(false)
@@ -103,15 +105,15 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customer: data,
-          items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
+          items: items.map((i) => ({ productId: i.id, quantity: i.quantity })),
         }),
       })
       const json: { success?: boolean; orderId?: string; error?: string } = await res.json()
-      if (!res.ok) { setApiError(json.error ?? 'Грешка при изпращане на поръчката.'); return }
+      if (!res.ok) { setApiError(json.error ?? t('errorGeneric')); return }
       clearCart()
       router.push(`/checkout/success?orderId=${json.orderId ?? ''}`)
     } catch {
-      setApiError('Мрежова грешка. Проверете връзката и опитайте отново.')
+      setApiError(t('errorNetwork'))
     }
   }
 
@@ -132,16 +134,16 @@ export default function CheckoutPage() {
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-10">
           <nav className="flex items-center gap-2 mb-5" aria-label="Breadcrumb">
-            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">Начало</Link>
+            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">{t('breadcrumbHome')}</Link>
             <span className="text-white/15 font-mono text-[9px]">/</span>
-            <Link href="/cart" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">Количка</Link>
+            <Link href="/cart" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">{t('breadcrumbCart')}</Link>
             <span className="text-white/15 font-mono text-[9px]">/</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">Поръчка</span>
+            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">{t('breadcrumbOrder')}</span>
           </nav>
           <h1 className="font-display text-[40px] sm:text-[52px] leading-[0.92] text-white">
-            ФИНАЛИЗИРАЙ <span className="text-amber">ПОРЪЧКАТА</span>
+            {t('heading1')} <span className="text-amber">{t('headingAccent')}</span>
           </h1>
-          <Stepper />
+          <Stepper labels={{ cart: t('stepCart'), details: t('stepDetails'), confirm: t('stepConfirm') }} />
         </div>
       </div>
 
@@ -154,44 +156,44 @@ export default function CheckoutPage() {
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
               <p className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/25 mb-5 pb-4 border-b border-white/[0.06]">
-                Данни за доставка
+                {t('sectionDelivery')}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <FormField label="Три имена" error={errors.name?.message} required>
+                  <FormField label={t('fieldName')} error={errors.name?.message} required>
                     <input {...register('name')} placeholder="Иван Иванов" aria-invalid={errors.name ? 'true' : 'false'} className={inputClass}/>
                   </FormField>
                 </div>
 
-                <FormField label="Имейл" error={errors.email?.message} required>
+                <FormField label={t('fieldEmail')} error={errors.email?.message} required>
                   <input {...register('email')} type="email" placeholder="ivan@example.com" aria-invalid={errors.email ? 'true' : 'false'} className={inputClass}/>
                 </FormField>
 
-                <FormField label="Телефон" error={errors.phone?.message} required>
+                <FormField label={t('fieldPhone')} error={errors.phone?.message} required>
                   <input {...register('phone')} type="tel" placeholder="+359888123456" aria-invalid={errors.phone ? 'true' : 'false'} className={inputClass}/>
                 </FormField>
 
                 <div className="sm:col-span-2">
-                  <FormField label="Адрес" error={errors.address?.message} required>
+                  <FormField label={t('fieldAddress')} error={errors.address?.message} required>
                     <input {...register('address')} placeholder="ул. Граф Игнатиев 15" aria-invalid={errors.address ? 'true' : 'false'} className={inputClass}/>
                   </FormField>
                 </div>
 
-                <FormField label="Град" error={errors.city?.message} required>
+                <FormField label={t('fieldCity')} error={errors.city?.message} required>
                   <input {...register('city')} placeholder="София" aria-invalid={errors.city ? 'true' : 'false'} className={inputClass}/>
                 </FormField>
 
-                <FormField label="Пощенски код" error={errors.postalCode?.message} required>
+                <FormField label={t('fieldPostalCode')} error={errors.postalCode?.message} required>
                   <input {...register('postalCode')} placeholder="1000" aria-invalid={errors.postalCode ? 'true' : 'false'} className={inputClass}/>
                 </FormField>
 
                 <div className="sm:col-span-2">
-                  <FormField label="Бележки" error={errors.notes?.message}>
+                  <FormField label={t('fieldNotes')} error={errors.notes?.message}>
                     <textarea
                       {...register('notes')}
                       rows={3}
-                      placeholder="Допълнителни инструкции за доставка..."
+                      placeholder={t('notesPlaceholder')}
                       aria-invalid={errors.notes ? 'true' : 'false'}
                       className="w-full px-4 py-3 bg-navy border border-white/[0.1] font-sans text-[14px] text-white/80 placeholder:text-white/20 outline-none transition-colors duration-200 focus:border-amber/50 resize-none min-h-[100px] aria-[invalid=true]:border-red-400/50"
                     />
@@ -201,7 +203,7 @@ export default function CheckoutPage() {
 
               {/* Payment */}
               <p className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/25 mt-8 mb-5 pb-4 border-b border-white/[0.06]">
-                Начин на плащане
+                {t('sectionPayment')}
               </p>
 
               <div className="border border-amber/25 bg-amber/[0.04] px-5 py-4 flex items-start gap-4">
@@ -212,17 +214,17 @@ export default function CheckoutPage() {
                 </div>
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/70 mb-1">
-                    Наложен платеж / Тестов режим
+                    {t('paymentMethod')}
                   </p>
                   <p className="font-mono text-[9px] text-white/30">
-                    Stripe интеграция ще бъде добавена в реалния проект
+                    {t('paymentNote')}
                   </p>
                   <div className="flex items-center gap-1.5 mt-2">
                     <svg className="w-3 h-3 text-white/20" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <rect x="2" y="7" width="12" height="8" rx="1"/>
                       <path d="M5 7V5a3 3 0 016 0v2"/>
                     </svg>
-                    <span className="font-mono text-[9px] text-white/20">Защитена поръчка</span>
+                    <span className="font-mono text-[9px] text-white/20">{t('secureOrder')}</span>
                   </div>
                 </div>
               </div>
@@ -243,10 +245,10 @@ export default function CheckoutPage() {
                 {isSubmitting ? (
                   <>
                     <span className="w-4 h-4 border-2 border-navy-dk/30 border-t-navy-dk rounded-full animate-spin"/>
-                    Изпращане...
+                    {t('submitting')}
                   </>
                 ) : (
-                  'Потвърди поръчката →'
+                  t('submitBtn')
                 )}
               </button>
 
@@ -258,12 +260,12 @@ export default function CheckoutPage() {
             <div className="bg-navy border border-white/[0.08] p-5 sm:p-6">
 
               <h2 className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 mb-4 pb-4 border-b border-white/[0.06]">
-                Обобщение
+                {t('summary')}
               </h2>
 
               {/* Item list */}
               <div className="mb-4 flex flex-col gap-0">
-                {items.map(item => (
+                {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 py-3 border-b border-white/[0.04]">
                     <div className="relative w-14 h-14 shrink-0 bg-navy-dk border border-white/[0.08]">
                       {item.imageUrl ? (
@@ -288,24 +290,24 @@ export default function CheckoutPage() {
 
               {/* Subtotal */}
               <div className="flex items-center justify-between py-2">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Продукти</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">{t('labelProducts')}</span>
                 <span className="font-mono text-[11px] text-white/60">{total.toLocaleString('bg-BG')} EUR</span>
               </div>
 
               {/* Shipping */}
               <div className="flex items-center justify-between py-2 border-b border-white/[0.06] pb-4 mb-4">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">Доставка</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/30">{t('labelShipping')}</span>
                 <span className={`font-mono text-[10px] ${freeShip ? 'text-amber' : 'text-white/40'}`}>
-                  {freeShip ? 'Безплатно' : 'По договаряне'}
+                  {freeShip ? t('shippingFree') : t('shippingNegotiated')}
                 </span>
               </div>
 
               {/* Total */}
               <div className="flex items-end justify-between">
-                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/40">Общо</span>
+                <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-white/40">{t('labelTotal')}</span>
                 <div className="text-right">
                   <p className="font-display text-[36px] text-amber leading-none">{total.toLocaleString('bg-BG')}</p>
-                  <p className="font-mono text-[9px] text-white/25 mt-0.5">EUR с ДДС</p>
+                  <p className="font-mono text-[9px] text-white/25 mt-0.5">{t('priceWithVat')}</p>
                 </div>
               </div>
 
@@ -314,7 +316,7 @@ export default function CheckoutPage() {
                 href="/cart"
                 className="mt-5 block text-center font-mono text-[9px] tracking-[0.15em] uppercase text-white/20 hover:text-white/40 transition-colors"
               >
-                ← Редактирай количката
+                {t('editCart')}
               </Link>
             </div>
           </div>

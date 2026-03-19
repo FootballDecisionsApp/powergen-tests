@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/lib/navigation'
 
-export const metadata: Metadata = {
-  title: 'За нас — PlayCube',
-  description:
-    'Над 20 години опит в промишлени генератори и енергийни решения за критична инфраструктура в България и региона.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata')
+  return {
+    title: t('aboutTitle'),
+    description: t('aboutDescription'),
+  }
 }
 
 const milestones = [
@@ -14,50 +17,6 @@ const milestones = [
   { year: '2016', text: 'ISO 9001 сертификация и отваряне на сервизен хъб в Пловдив.' },
   { year: '2020', text: 'Дигитализация на поддръжката — 24/7 отдалечено наблюдение на агрегатите.' },
   { year: '2024', text: 'Над 500 активни инсталации в 12 държави от региона.' },
-]
-
-const values = [
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <path d="M24 4 L44 14 L44 34 L24 44 L4 34 L4 14 Z"/>
-        <path d="M16 24 L21 29 L32 18"/>
-      </svg>
-    ),
-    title: 'Надеждност',
-    body: 'Всеки агрегат, който напуска склада ни, преминава 8-часов товаров тест. Нулев компромис с качеството.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <circle cx="24" cy="24" r="18"/>
-        <path d="M24 12 L24 24 L32 30"/>
-      </svg>
-    ),
-    title: 'Бързина',
-    body: 'Реакция до 4 часа при аварийни случаи. Собствен флот от сервизни автомобили в цяла България.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <path d="M8 24 C8 15 15 8 24 8 C33 8 40 15 40 24 C40 33 33 40 24 40"/>
-        <path d="M4 28 L8 24 L12 28"/>
-        <circle cx="18" cy="38" r="5"/>
-      </svg>
-    ),
-    title: 'Устойчивост',
-    body: 'Работим с производители, сертифицирани по ISO 14001. Предлагаме и газови решения с нисък въглероден отпечатък.',
-  },
-  {
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <rect x="6" y="18" width="36" height="24" rx="2"/>
-        <path d="M16 18 L16 12 C16 8 20 5 24 5 C28 5 32 8 32 12 L32 18"/>
-      </svg>
-    ),
-    title: 'Сигурност',
-    body: 'CE и ISO 8528 сертифицирани продукти. Пълна документация и техническа поддръжка за всяка инсталация.',
-  },
 ]
 
 const team = [
@@ -78,7 +37,60 @@ const industries = [
   'Обществен сектор',
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const t = await getTranslations('about')
+
+  const valueItems = [
+    {
+      icon: (
+        <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <path d="M24 4 L44 14 L44 34 L24 44 L4 34 L4 14 Z"/>
+          <path d="M16 24 L21 29 L32 18"/>
+        </svg>
+      ),
+      title: t('value1Title'),
+      body: t('value1Body'),
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <circle cx="24" cy="24" r="18"/>
+          <path d="M24 12 L24 24 L32 30"/>
+        </svg>
+      ),
+      title: t('value2Title'),
+      body: t('value2Body'),
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <path d="M8 24 C8 15 15 8 24 8 C33 8 40 15 40 24 C40 33 33 40 24 40"/>
+          <path d="M4 28 L8 24 L12 28"/>
+          <circle cx="18" cy="38" r="5"/>
+        </svg>
+      ),
+      title: t('value3Title'),
+      body: t('value3Body'),
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 48 48" className="w-12 h-12 text-amber" fill="none" stroke="currentColor" strokeWidth="1.4">
+          <rect x="6" y="18" width="36" height="24" rx="2"/>
+          <path d="M16 18 L16 12 C16 8 20 5 24 5 C28 5 32 8 32 12 L32 18"/>
+        </svg>
+      ),
+      title: t('value4Title'),
+      body: t('value4Body'),
+    },
+  ]
+
+  const stats = [
+    { num: t('stat1Num'), label: t('stat1Label') },
+    { num: t('stat2Num'), label: t('stat2Label') },
+    { num: t('stat3Num'), label: t('stat3Label') },
+    { num: t('stat4Num'), label: t('stat4Label') },
+  ]
+
   return (
     <main className="pt-[72px]">
 
@@ -94,17 +106,17 @@ export default function AboutPage() {
           }}
         />
         <div className="relative px-4 sm:px-8 lg:px-16 py-20 sm:py-24 max-w-screen-xl mx-auto">
-<p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
+          <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
-            Нашата история
+            {t('eyebrow')}
           </p>
           <h1 className="font-display text-[52px] sm:text-[72px] lg:text-[88px] leading-[0.9] text-white mb-8">
-            ПОВЕЧЕ ОТ<br />
-            <span className="text-amber">20 ГОДИНИ</span><br />
-            НАДЕЖДНОСТ
+            {t('heading1')}<br />
+            <span className="text-amber">{t('headingAccent')}</span><br />
+            {t('heading2')}
           </h1>
           <p className="font-sans font-light text-[15px] text-white/45 max-w-[520px] leading-relaxed">
-            Integrated Energy Systems OOD е основана през 2003 г. с мисия да осигури непрекъснато и надеждно електрозахранване за бизнеса и критичната инфраструктура в България. Днес сме водещ доставчик на промишлени генератори с над 500 успешни инсталации.
+            {t('introBody')}
           </p>
         </div>
       </section>
@@ -112,12 +124,7 @@ export default function AboutPage() {
       {/* ── STATS BAR ── */}
       <section className="bg-navy border-y border-amber/[0.1]">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 grid grid-cols-2 lg:grid-cols-4 divide-x divide-amber/[0.1]">
-          {[
-            { num: '500+', label: 'Инсталации' },
-            { num: '20г',  label: 'На пазара' },
-            { num: '12',   label: 'Държави' },
-            { num: '24/7', label: 'Поддръжка' },
-          ].map(({ num, label }) => (
+          {stats.map(({ num, label }) => (
             <div key={label} className="flex flex-col items-center py-10 px-6 text-center">
               <span className="font-display text-[44px] text-amber leading-none mb-1">{num}</span>
               <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/35">{label}</span>
@@ -131,13 +138,13 @@ export default function AboutPage() {
         <div className="max-w-screen-xl mx-auto">
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
-            Нашите ценности
+            {t('valuesEyebrow')}
           </p>
           <h2 className="font-display text-[44px] sm:text-[56px] leading-[0.93] text-navy mb-14">
-            ПРИНЦИПИ, <span className="text-amber">КОИТО НЕ</span><br />КОМПРОМИСИРАМЕ
+            {t('valuesHeading')} <span className="text-amber">{t('valuesSubHeading1')}</span><br />{t('valuesSubHeading2')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0.5 bg-smoke">
-            {values.map((v) => (
+            {valueItems.map((v) => (
               <div key={v.title} className="bg-paper p-8 group hover:bg-cream transition-colors duration-200 cursor-default">
                 <div className="mb-6">{v.icon}</div>
                 <h3 className="font-display text-[22px] text-navy mb-3">{v.title}</h3>
@@ -153,13 +160,13 @@ export default function AboutPage() {
         <div className="max-w-screen-xl mx-auto">
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
-            Хронология
+            {t('timelineEyebrow')}
           </p>
           <h2 className="font-display text-[44px] sm:text-[56px] leading-[0.93] text-white mb-16">
-            НАШИЯТ <span className="text-amber">ПЪТ</span>
+            {t('timelineHeading1')} <span className="text-amber">{t('timelineHeadingAccent')}</span>
           </h2>
           <div className="flex flex-col gap-0">
-            {milestones.map(({ year, text }, i) => (
+            {milestones.map(({ year, text }) => (
               <div
                 key={year}
                 className="flex gap-8 sm:gap-12 py-7 border-t border-white/[0.06] group hover:bg-white/[0.02] transition-colors duration-200 px-4 -mx-4"
@@ -181,10 +188,10 @@ export default function AboutPage() {
         <div className="max-w-screen-xl mx-auto">
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
-            Екипът
+            {t('teamEyebrow')}
           </p>
           <h2 className="font-display text-[44px] sm:text-[56px] leading-[0.93] text-navy mb-14">
-            ХОРАТА ЗАД <span className="text-amber">PLAYCUBE</span>
+            {t('teamHeading1')} <span className="text-amber">{t('teamHeadingAccent')}</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0.5 bg-smoke">
             {team.map(({ name, role, exp }) => (
@@ -208,7 +215,7 @@ export default function AboutPage() {
       <section className="bg-navy py-16 sm:py-20 px-4 sm:px-8 lg:px-16">
         <div className="max-w-screen-xl mx-auto">
           <p className="font-mono text-[9px] tracking-[0.3em] uppercase text-white/30 mb-6">
-            Индустрии, които обслужваме
+            {t('industriesLabel')}
           </p>
           <div className="flex flex-wrap gap-2">
             {industries.map((ind) => (
@@ -226,20 +233,20 @@ export default function AboutPage() {
       {/* ── CTA ── */}
       <section className="bg-amber px-4 sm:px-8 lg:px-16 py-16 sm:py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
         <h2 className="font-display text-[36px] sm:text-[48px] leading-[0.93] text-navy-dk max-w-[500px]">
-          ГОТОВИ СМЕ ДА РАБОТИМ<br />ЗАЕДНО С ВАС
+          {t('ctaHeading')}
         </h2>
         <div className="flex flex-col sm:flex-row gap-4 shrink-0">
           <Link
             href="/products"
             className="flex items-center justify-center px-8 py-4 bg-navy-dk text-white font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-navy hover:-translate-y-0.5 min-h-[52px]"
           >
-            Виж продуктите →
+            {t('ctaProducts')}
           </Link>
           <Link
             href="/contact"
             className="flex items-center justify-center px-8 py-4 border border-navy-dk text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-navy-dk hover:text-white min-h-[52px]"
           >
-            Свържи се с нас
+            {t('ctaContact')}
           </Link>
         </div>
       </section>

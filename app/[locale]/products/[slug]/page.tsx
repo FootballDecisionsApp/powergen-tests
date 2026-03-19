@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { routing } from '@/i18n/routing'
+import { Link } from '@/lib/navigation'
 import { sanityFetch } from '@/lib/sanity/client'
 import { productBySlugQuery, allProductSlugsQuery } from '@/lib/sanity/queries'
 import type { IProduct } from '@/types'
@@ -14,32 +16,26 @@ export async function generateStaticParams() {
   const slugs = await sanityFetch<{ slug: string }[]>(allProductSlugsQuery, {}, 0).catch(
     () => [] as { slug: string }[]
   )
-  return slugs.map(({ slug }) => ({ slug }))
+  return routing.locales.flatMap((locale) =>
+    slugs.map(({ slug }) => ({ locale, slug }))
+  )
 }
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string; locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
+  const t = await getTranslations('metadata')
   const product = await sanityFetch<IProduct | null>(productBySlugQuery, { slug }).catch(
     () => null
   )
-  if (!product) return { title: 'Продукт не е намерен — PlayCube' }
+  if (!product) return { title: t('productNotFound') }
   return {
     title: product.seoTitle ?? `${product.name} — PlayCube`,
     description: product.seoDescription ?? product.description?.slice(0, 155),
   }
-}
-
-// ─── Labels ───────────────────────────────────────────────────────────────────
-
-const fuelLabels: Record<IProduct['fuelType'], string> = {
-  diesel:   'Дизелов',
-  petrol:   'Бензинов',
-  gas:      'Газов',
-  inverter: 'Инверторен',
 }
 
 const fuelColors: Record<IProduct['fuelType'], string> = {
@@ -49,15 +45,12 @@ const fuelColors: Record<IProduct['fuelType'], string> = {
   inverter: 'bg-navy text-amber border border-amber/30',
 }
 
-const phaseLabels: Record<NonNullable<IProduct['phases']>, string> = {
-  '1phase': '1-фазов',
-  '3phase': '3-фазов',
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params
+  const t = await getTranslations('productDetail')
+
   const product = await sanityFetch<IProduct | null>(
     productBySlugQuery,
     { slug },
@@ -65,6 +58,18 @@ export default async function ProductDetailPage({ params }: Props) {
   )
 
   if (!product) notFound()
+
+  const fuelLabels: Record<IProduct['fuelType'], string> = {
+    diesel:   t('fuelDiesel'),
+    petrol:   t('fuelPetrol'),
+    gas:      t('fuelGas'),
+    inverter: t('fuelInverter'),
+  }
+
+  const phaseLabels: Record<NonNullable<IProduct['phases']>, string> = {
+    '1phase': t('phase1'),
+    '3phase': t('phase3'),
+  }
 
   const subtitleParts: string[] = [fuelLabels[product.fuelType]]
   if (product.phases) subtitleParts.push(phaseLabels[product.phases])
@@ -76,23 +81,23 @@ export default async function ProductDetailPage({ params }: Props) {
   const subtitle = subtitleParts.join(' · ')
 
   const warrantyValue =
-    product.specifications?.find(s =>
-      s.key.toLowerCase().includes('гаранц')
-    )?.value ?? '2 години'
+    product.specifications?.find((s) =>
+      s.key.toLowerCase().includes('гаранц') || s.key.toLowerCase().includes('warrant')
+    )?.value ?? t('warrantyFallback')
 
   const miniSpecs = [
     {
-      key: 'Мощност',
+      key: t('specPower'),
       value: product.powerKVA
         ? `${product.powerKW}kW / ${product.powerKVA}kVA`
         : `${product.powerKW} kW`,
     },
     {
-      key: 'Захранване',
-      value: product.phases ? phaseLabels[product.phases] : 'Монофазно',
+      key: t('specPhase'),
+      value: product.phases ? phaseLabels[product.phases] : t('singlePhase'),
     },
-    { key: 'Автостарт', value: product.autoStart ? 'Да' : 'Не' },
-    { key: 'Гаранция',  value: warrantyValue },
+    { key: t('specAutoStart'), value: product.autoStart ? t('yes') : t('no') },
+    { key: t('specWarranty'), value: warrantyValue },
   ]
 
   const discountPct =
@@ -100,8 +105,8 @@ export default async function ProductDetailPage({ params }: Props) {
       ? Math.round((1 - product.price / product.oldPrice) * 100)
       : null
 
-  const related: IProduct[] = (product.related ?? []).map(r => ({ ...r, inStock: true }))
-  const images   = product.images   ?? (product.image ? [product.image] : [])
+  const related: IProduct[] = (product.related ?? []).map((r) => ({ ...r, inStock: true }))
+  const images    = product.images ?? (product.image ? [product.image] : [])
   const imageAlts = product.imageAlts ?? []
 
   return (
@@ -132,11 +137,11 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 mb-7" aria-label="Breadcrumb">
             <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">
-              Начало
+              {t('breadcrumbHome')}
             </Link>
             <span className="text-white/15 font-mono text-[9px]">/</span>
             <Link href="/products" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">
-              Генератори
+              {t('breadcrumbProducts')}
             </Link>
             <span className="text-white/15 font-mono text-[9px]">/</span>
             <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">
@@ -156,7 +161,7 @@ export default async function ProductDetailPage({ params }: Props) {
             )}
             {product.featured && (
               <span className="px-2.5 py-1 border border-amber/30 text-amber font-mono text-[9px] tracking-[0.2em] uppercase">
-                ТОП
+                {t('topBadge')}
               </span>
             )}
           </div>
@@ -198,7 +203,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   <rect x="195" y="100" width="40" height="40" rx="2" stroke="#D4A017" strokeWidth="1"/>
                 </svg>
                 <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/20">
-                  Снимка не е налична
+                  {t('noImage')}
                 </span>
               </div>
             )}
@@ -216,7 +221,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
             {/* 4-spec mini-grid */}
             <div className="grid grid-cols-2 gap-px bg-white/[0.04] mb-6">
-              {miniSpecs.map(spec => (
+              {miniSpecs.map((spec) => (
                 <div key={spec.key} className="bg-navy px-4 py-3.5">
                   <p className="font-mono text-[8px] tracking-[0.25em] uppercase text-white/25 mb-1.5">
                     {spec.key}
@@ -246,7 +251,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 {product.price.toLocaleString('bg-BG')}
               </span>
               <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-white/35 mb-1">
-                EUR с ДДС
+                {t('priceWithVat')}
               </span>
             </div>
 
@@ -263,9 +268,9 @@ export default async function ProductDetailPage({ params }: Props) {
             {/* Trust row */}
             <div className="flex flex-wrap items-center gap-4 mt-5 pt-5 border-t border-white/[0.06]">
               {[
-                { icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', label: 'CE & ISO' },
-                { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', label: '24/7 Поддръжка' },
-                { icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', label: 'Mock плащане' },
+                { icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', label: t('trustCE') },
+                { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', label: t('trust247') },
+                { icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', label: t('trustMockPayment') },
               ].map(({ icon, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
                   <svg className="w-3 h-3 text-amber/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -289,10 +294,10 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16">
             <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
               <span className="w-7 h-px bg-amber shrink-0" />
-              Детайли
+              {t('specsEyebrow')}
             </p>
             <h2 className="font-display text-[36px] sm:text-[48px] leading-[0.93] text-white mb-10">
-              ТЕХНИЧЕСКИ <span className="text-amber">ДАННИ</span>
+              {t('specsHeading1')} <span className="text-amber">{t('specsHeadingAccent')}</span>
             </h2>
 
             <div className="overflow-hidden border border-white/[0.06]">
@@ -324,22 +329,22 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16">
             <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
               <span className="w-7 h-px bg-amber shrink-0" />
-              Вижте също
+              {t('relatedEyebrow')}
             </p>
             <h2 className="font-display text-[36px] sm:text-[48px] leading-[0.93] text-white mb-10">
-              ПОДОБНИ <span className="text-amber">ГЕНЕРАТОРИ</span>
+              {t('relatedHeading1')} <span className="text-amber">{t('relatedHeadingAccent')}</span>
             </h2>
 
             {/* Horizontal scroll on mobile, grid on desktop */}
             <div className="sm:hidden flex gap-0.5 overflow-x-auto pb-4 -mx-4 px-4">
-              {related.map(p => (
+              {related.map((p) => (
                 <div key={p._id} className="flex-shrink-0 w-[280px]">
                   <ProductCard product={p} />
                 </div>
               ))}
             </div>
             <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 gap-0.5 bg-white/[0.03]">
-              {related.map(p => (
+              {related.map((p) => (
                 <ProductCard key={p._id} product={p} />
               ))}
             </div>
@@ -350,14 +355,14 @@ export default async function ProductDetailPage({ params }: Props) {
       {/* ── BOTTOM CTA ───────────────────────────────────────────────────── */}
       <section className="bg-amber px-4 sm:px-8 lg:px-16 py-12 sm:py-16 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-screen-xl mx-auto">
         <h2 className="font-display text-[32px] sm:text-[40px] leading-[0.93] text-navy-dk">
-          НУЖНА ВИ Е ОФЕРТА<br />
-          <span className="text-navy/60">ЗА ПРОЕКТ?</span>
+          {t('ctaHeading1')}<br />
+          <span className="text-navy/60">{t('ctaHeading2')}</span>
         </h2>
         <Link
           href="/contact"
           className="shrink-0 flex items-center min-h-[52px] px-8 bg-navy-dk text-white font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-navy hover:-translate-y-0.5"
         >
-          Свържи се с нас →
+          {t('ctaBtn')}
         </Link>
       </section>
 

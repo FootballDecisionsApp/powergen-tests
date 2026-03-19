@@ -1,13 +1,16 @@
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/lib/navigation'
 
-const stats = [
-  { num: '500+', label: 'Успешни инсталации' },
-  { num: '20г',  label: 'Опит в индустрията' },
-  { num: '98%',  label: 'Удовлетвореност на клиентите' },
-  { num: '24/7', label: 'Техническа поддръжка' },
-]
+export async function TrustBar() {
+  const t = await getTranslations('trustBar')
 
-export function TrustBar() {
+  const stats = [
+    { num: t('stat1Num'), label: t('stat1Label') },
+    { num: t('stat2Num'), label: t('stat2Label') },
+    { num: t('stat3Num'), label: t('stat3Label') },
+    { num: t('stat4Num'), label: t('stat4Label') },
+  ]
+
   return (
     <>
       {/* ── ABOUT / STATS section ── */}
@@ -26,21 +29,21 @@ export function TrustBar() {
             <div className="relative">
               <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
                 <span className="w-7 h-px bg-amber shrink-0" />
-                Нашият опит
+                {t('eyebrow')}
               </p>
               <h2 className="font-display text-[48px] sm:text-[60px] lg:text-[72px] leading-[0.93] text-white">
-                РЕЗУЛТАТИ<br />
-                <span className="text-amber">ГОВОРЯТ</span>
+                {t('heading1')}<br />
+                <span className="text-amber">{t('headingAccent')}</span>
               </h2>
               <p className="mt-6 font-sans font-light text-[15px] leading-relaxed text-white/40 max-w-[380px]">
-                Над две десетилетия осигуряваме непрекъснато захранване на бизнеси, болници и производствени мощности из цялата страна.
+                {t('body')}
               </p>
               <div className="mt-10">
                 <Link
                   href="/products"
                   className="inline-flex items-center px-8 py-4 bg-amber text-navy-dk font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-amber-light hover:-translate-y-0.5"
                 >
-                  Разгледай каталога →
+                  {t('cta')}
                 </Link>
               </div>
             </div>
@@ -69,13 +72,13 @@ export function TrustBar() {
       {/* ── GOLD CTA BANNER ── */}
       <section className="bg-amber px-4 sm:px-8 lg:px-16 py-16 sm:py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
         <h2 className="font-display text-[36px] sm:text-[48px] lg:text-[60px] leading-[0.93] text-navy-dk max-w-[580px]">
-          НУЖЕН ВИ Е<br />НАДЕЖДЕН ГЕНЕРАТОР?
+          {t('ctaBannerHeading1')}<br />{t('ctaBannerHeadingAccent')}
         </h2>
         <Link
           href="/products"
           className="flex items-center justify-center px-10 py-5 bg-navy-dk text-white font-mono font-medium text-[11px] tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-200 hover:bg-navy hover:-translate-y-0.5"
         >
-          Виж всички продукти →
+          {t('ctaBannerBtn')}
         </Link>
       </section>
     </>
