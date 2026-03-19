@@ -17,14 +17,14 @@ const oswald = Oswald({
 })
 
 const dmSans = DM_Sans({
-  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-dm-sans',
   display: 'swap',
 })
 
 const dmMono = DM_Mono({
-  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500'],
   variable: '--font-dm-mono',
   display: 'swap',
