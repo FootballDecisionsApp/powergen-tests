@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /studio
+Disallow: /api/
+Disallow: /bg/cart
+Disallow: /en/cart
+Disallow: /bg/checkout
+Disallow: /en/checkout
+
+Sitemap: https://playcube-ies.vercel.app/sitemap.xml

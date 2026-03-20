@@ -65,7 +65,7 @@ export function Hero() {
 
         {/* Eyebrow */}
         <p
-          className="flex items-center gap-3 mb-5 font-mono text-[9px] tracking-[0.25em] uppercase text-amber animate-fade-up"
+          className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber animate-fade-up"
           style={{ animationDelay: '0.05s' }}
         >
           <span className="w-8 h-px bg-amber shrink-0" />

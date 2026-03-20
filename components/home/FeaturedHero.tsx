@@ -60,7 +60,7 @@ export function FeaturedHero({ product }: FeaturedHeroProps) {
         <div className="px-4 sm:px-8 lg:px-16 py-16 sm:py-20 lg:py-24 lg:pr-12 xl:pr-16">
 
           {/* Eyebrow */}
-          <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[3px] uppercase text-amber before:content-[''] before:w-7 before:h-px before:bg-amber">
+          <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber before:content-[''] before:w-7 before:h-px before:bg-amber">
             Препоръчан продукт
           </p>
 

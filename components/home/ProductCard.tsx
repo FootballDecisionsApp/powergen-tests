@@ -46,7 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="relative bg-navy-dk aspect-[4/3] flex items-center justify-center overflow-hidden">
 
           {/* Fuel badge */}
-          <span className="absolute top-4 left-4 z-10 px-2.5 py-1 bg-amber text-navy-dk font-mono text-[9px] font-medium tracking-[0.2em] uppercase">
+          <span className="absolute top-4 left-4 z-20 px-2.5 py-1 bg-amber text-navy-dk font-mono text-[9px] font-medium tracking-[0.2em] uppercase">
             {fuelTypeLabel[product.fuelType]}
           </span>
 
@@ -71,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Out of stock badge */}
           {!product.inStock && (
-            <span className="absolute top-4 right-4 px-2 py-0.5 bg-black/60 text-white/70 font-mono text-[8px] tracking-[0.2em] uppercase">
+            <span className="absolute top-4 right-4 z-20 px-2 py-0.5 bg-black/60 text-white/70 font-mono text-[8px] tracking-[0.2em] uppercase">
               {t('outOfStock')}
             </span>
           )}

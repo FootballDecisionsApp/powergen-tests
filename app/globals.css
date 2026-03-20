@@ -60,6 +60,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Latin characters in Oswald have a smaller optical size than Cyrillic.
+   Scale up display headings slightly for English to compensate. */
+:lang(en) .font-display {
+  font-size: 1.3em;
+}
+
 body {
   background: #F5F0E8;
   color: #1B2D4A;
