@@ -82,7 +82,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const warrantyValue =
     product.specifications?.find((s) =>
-      s.key.toLowerCase().includes('гаранц') || s.key.toLowerCase().includes('warrant')
+      s.key?.toLowerCase().includes('гаранц') || s.key?.toLowerCase().includes('warrant')
     )?.value ?? t('warrantyFallback')
 
   const miniSpecs = [
