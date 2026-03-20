@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocale } from 'next-intl'
 import { Link, usePathname } from '@/lib/navigation'
@@ -15,6 +15,8 @@ export function Header() {
   const locale = useLocale()
   const { getTotalItems, openCart } = useCart()
   const totalItems = getTotalItems()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   const navLinks = [
     { href: '/' as const, label: t('home') },
@@ -108,7 +110,7 @@ export function Header() {
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
             <span className="hidden sm:inline">{t('cart')}</span>
-            {totalItems > 0 && (
+            {mounted && totalItems > 0 && (
               <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber text-navy font-mono text-[10px] font-bold flex items-center justify-center">
                 {totalItems}
               </span>
