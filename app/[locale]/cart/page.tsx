@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
@@ -11,9 +12,11 @@ export default function CartPage() {
   const total     = getTotalPrice()
   const itemCount = getTotalItems()
   const freeShip  = total > 5000
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   // ── Empty state ──────────────────────────────────────────────────────────────
-  if (items.length === 0) {
+  if (!mounted || items.length === 0) {
     return (
       <main className="min-h-screen bg-navy-dk pt-[72px] flex items-center justify-center">
         <div className="flex flex-col items-center text-center px-4">
