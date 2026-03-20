@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
@@ -11,6 +11,8 @@ export function CartDrawer() {
   const { items, isCartOpen, closeCart, getTotalPrice, getTotalItems } = useCart()
   const total     = getTotalPrice()
   const itemCount = getTotalItems()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     document.body.style.overflow = isCartOpen ? 'hidden' : ''
@@ -50,7 +52,7 @@ export function CartDrawer() {
             <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-white/60">
               {t('drawerLabel')}
             </span>
-            {itemCount > 0 && (
+            {mounted && itemCount > 0 && (
               <span className="w-5 h-5 bg-amber text-navy-dk font-mono text-[10px] font-bold flex items-center justify-center">
                 {itemCount}
               </span>
@@ -69,7 +71,7 @@ export function CartDrawer() {
 
         {/* ── Body ── */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6">
-          {items.length === 0 ? (
+          {!mounted || items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full py-12 text-center">
               <svg className="w-12 h-12 mb-5 text-white/10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.75">
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -100,7 +102,7 @@ export function CartDrawer() {
         </div>
 
         {/* ── Footer ── */}
-        {items.length > 0 && (
+        {mounted && items.length > 0 && (
           <div className="flex-shrink-0 border-t border-white/[0.08] p-4 sm:p-6">
             <div className="flex items-end justify-between mb-1">
               <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/30">{t('labelTotal')}</span>
