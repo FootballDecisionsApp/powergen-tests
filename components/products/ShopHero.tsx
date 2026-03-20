@@ -1,14 +1,17 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/lib/navigation'
+
+export type SortOption = 'powerAsc' | 'powerDesc' | 'priceAsc' | 'priceDesc'
 
 interface ShopHeroProps {
   currentFuelType: string
   currentMinKW: number
   currentMaxKW: number
   currentInStock: boolean
+  currentSort: SortOption
   productCount: number
 }
 
@@ -25,6 +28,7 @@ export function ShopHero({
   currentMinKW,
   currentMaxKW,
   currentInStock,
+  currentSort,
   productCount,
 }: ShopHeroProps) {
   const t = useTranslations('products')
@@ -45,6 +49,13 @@ export function ShopHero({
     { value: 'large',   label: t('powerLarge'), min: 50, max: 9999 },
   ]
 
+  const sortOptions: { value: SortOption; label: string }[] = [
+    { value: 'powerAsc',  label: t('sortPowerAsc') },
+    { value: 'powerDesc', label: t('sortPowerDesc') },
+    { value: 'priceAsc',  label: t('sortPriceAsc') },
+    { value: 'priceDesc', label: t('sortPriceDesc') },
+  ]
+
   const push = useCallback(
     (patch: Record<string, string | number | boolean | undefined>) => {
       const params = new URLSearchParams()
@@ -53,15 +64,17 @@ export function ShopHero({
         minKW:    currentMinKW > 0 ? currentMinKW : undefined,
         maxKW:    currentMaxKW < 9999 ? currentMaxKW : undefined,
         inStock:  currentInStock ? 'true' : undefined,
+        sort:     currentSort !== 'powerAsc' ? currentSort : undefined,
         ...patch,
       }
       if (next.fuelType) params.set('fuelType', String(next.fuelType))
       if (next.minKW)    params.set('minKW', String(next.minKW))
       if (next.maxKW)    params.set('maxKW', String(next.maxKW))
       if (next.inStock)  params.set('inStock', 'true')
+      if (next.sort)     params.set('sort', String(next.sort))
       router.push(`/products${params.size ? `?${params}` : ''}`)
     },
-    [currentFuelType, currentMinKW, currentMaxKW, currentInStock, router]
+    [currentFuelType, currentMinKW, currentMaxKW, currentInStock, currentSort, router]
   )
 
   function handleFuelType(value: string) {
@@ -73,6 +86,10 @@ export function ShopHero({
       minKW: min > 0 ? min : undefined,
       maxKW: max < 9999 ? max : undefined,
     })
+  }
+
+  function handleSort(value: SortOption) {
+    push({ sort: value !== 'powerAsc' ? value : undefined })
   }
 
   const currentPowerKey = getPowerKey(currentMinKW, currentMaxKW)
@@ -118,7 +135,7 @@ export function ShopHero({
                 <button
                   key={value}
                   onClick={() => handleFuelType(value)}
-                  className={`px-3.5 py-1.5 font-mono text-[9px] tracking-[0.15em] uppercase border transition-all duration-150 ${
+                  className={`flex items-center justify-center px-3.5 h-7 leading-none font-mono text-[9px] tracking-[0.15em] uppercase border transition-all duration-150 ${
                     currentFuelType === value
                       ? 'border-amber text-amber bg-amber/[0.06]'
                       : 'border-white/[0.12] text-white/45 hover:border-amber/50 hover:text-amber/70'
@@ -140,7 +157,7 @@ export function ShopHero({
                 <button
                   key={value}
                   onClick={() => handlePowerRange(min, max)}
-                  className={`px-3.5 py-1.5 font-mono text-[9px] tracking-[0.15em] uppercase border transition-all duration-150 ${
+                  className={`flex items-center justify-center px-3.5 h-7 leading-none font-mono text-[9px] tracking-[0.15em] uppercase border transition-all duration-150 ${
                     currentPowerKey === value
                       ? 'border-amber text-amber bg-amber/[0.06]'
                       : 'border-white/[0.12] text-white/45 hover:border-amber/50 hover:text-amber/70'
@@ -156,7 +173,7 @@ export function ShopHero({
           <div className="flex items-center gap-4 py-4 px-8">
             <button
               onClick={() => push({ inStock: !currentInStock ? 'true' : undefined })}
-              className={`flex items-center gap-2.5 font-mono text-[9px] tracking-[0.15em] uppercase border px-3.5 py-1.5 transition-all duration-150 ${
+              className={`flex items-center gap-2.5 leading-none font-mono text-[9px] tracking-[0.15em] uppercase border px-3.5 h-7 transition-all duration-150 ${
                 currentInStock
                   ? 'border-amber text-amber bg-amber/[0.06]'
                   : 'border-white/[0.12] text-white/45 hover:border-amber/50 hover:text-amber/70'
@@ -184,14 +201,85 @@ export function ShopHero({
         </div>
       </div>
 
-      {/* Toolbar: count */}
-      <div className="bg-cream px-4 sm:px-8 lg:px-16 py-4 border-b border-smoke flex items-center justify-between">
-        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-ash">
+      {/* Toolbar: count + sort */}
+      <div className="bg-cream px-4 sm:px-8 lg:px-16 py-3 border-b border-smoke flex items-center justify-between gap-4">
+        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-ash shrink-0">
           {productCount} {productCount === 1 ? t('countSingular') : t('countPlural')}
         </span>
-        <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-dust">
-          {t('sortByPower')}
-        </span>
+
+        {/* Sort dropdown */}
+        <SortDropdown
+          value={currentSort}
+          options={sortOptions}
+          onChange={handleSort}
+          label={t('sortLabel')}
+        />
+      </div>
+    </div>
+  )
+}
+
+interface SortDropdownProps {
+  value: SortOption
+  options: { value: SortOption; label: string }[]
+  onChange: (v: SortOption) => void
+  label: string
+}
+
+function SortDropdown({ value, options, onChange, label }: SortDropdownProps) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [])
+
+  const current = options.find(o => o.value === value)!
+
+  return (
+    <div className="flex items-center gap-2 shrink-0" ref={ref}>
+      <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-dust hidden sm:inline">
+        {label}
+      </span>
+      <div className="relative">
+        {/* Trigger */}
+        <button
+          onClick={() => setOpen(v => !v)}
+          className={`flex items-center gap-3 pl-4 pr-3 h-9 font-mono text-[11px] tracking-[0.05em] border transition-colors duration-150 min-w-[130px] justify-between ${
+            open ? 'border-navy bg-white text-navy' : 'border-smoke bg-cream text-navy hover:border-navy/40'
+          }`}
+        >
+          {current.label}
+          <svg
+            className={`w-3 h-3 text-ash transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
+            viewBox="0 0 10 6" fill="none"
+          >
+            <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        {/* Menu */}
+        {open && (
+          <div className="absolute right-0 top-[calc(100%+4px)] z-50 min-w-full border border-smoke bg-white shadow-[0_8px_24px_rgba(16,30,51,0.1)]">
+            {options.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => { onChange(opt.value); setOpen(false) }}
+                className={`w-full text-left px-4 py-2.5 font-mono text-[11px] tracking-[0.05em] transition-colors duration-100 ${
+                  opt.value === value
+                    ? 'bg-navy text-white'
+                    : 'text-navy hover:bg-cream'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

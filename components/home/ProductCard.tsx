@@ -86,7 +86,7 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Card body */}
       <div className="p-5 sm:p-6 border-t border-smoke flex flex-col">
         <Link href={href}>
-          <h3 className="font-display text-[22px] sm:text-[24px] text-navy leading-none tracking-[0.02em] mb-3 hover:text-amber transition-colors duration-150">
+          <h3 className="font-display text-[26px] sm:text-[28px] text-navy leading-none tracking-[0.02em] mb-3 hover:text-amber transition-colors duration-150">
             {product.name}
           </h3>
         </Link>
@@ -94,12 +94,12 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Spec chips */}
         <div className="flex flex-wrap gap-3 mb-4">
           {[
-            `${product.powerKW} kW`,
+            `${product.powerKW} ${t('powerUnit')}`,
             fuelTypeLabel[product.fuelType],
-            ...(product.phases ? [product.phases === '1phase' ? '1 фаза' : '3 фази'] : []),
+            ...(product.phases ? [product.phases === '1phase' ? t('phase1') : t('phase3')] : []),
             ...(product.autoStart ? [t('autoStart')] : []),
           ].map((spec) => (
-            <span key={spec} className="flex items-center gap-1.5 font-mono text-[9px] tracking-[0.15em] uppercase text-ash">
+            <span key={spec} className="flex items-center gap-1.5 font-mono text-[11px] tracking-[0.1em] text-ash">
               <span className="w-1 h-1 rounded-full bg-amber shrink-0" />
               {spec}
             </span>
@@ -110,15 +110,15 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="mt-auto pt-4 flex items-end justify-between border-t border-smoke">
           <div>
             {product.oldPrice && (
-              <p className="font-mono text-[10px] text-dust line-through mb-0.5">
+              <p className="font-mono text-[11px] text-dust line-through mb-0.5">
                 {product.oldPrice.toLocaleString('bg-BG')} EUR
               </p>
             )}
-            <p className="font-display text-[28px] text-navy leading-none tracking-[0.02em]">
+            <p className="font-display text-[34px] text-navy leading-none tracking-[0.02em]">
               {product.price.toLocaleString('bg-BG')}{' '}
-              <span className="font-sans text-[11px] text-ash font-normal">лв</span>
+              <span className="font-sans text-[12px] text-ash font-normal">лв</span>
             </p>
-            <p className="font-mono text-[9px] text-dust mt-0.5">
+            <p className="font-mono text-[10px] text-dust mt-0.5">
               ≈ {Math.round(product.price / 1.956).toLocaleString('bg-BG')} €
             </p>
           </div>
