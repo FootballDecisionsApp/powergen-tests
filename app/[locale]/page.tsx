@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { sanityFetch } from '@/lib/sanity/client'
 import { featuredProductsQuery } from '@/lib/sanity/queries'
 import type { IProduct } from '@/types'
@@ -17,7 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const products = await sanityFetch<IProduct[]>(featuredProductsQuery).catch(
+  const locale = await getLocale()
+  const products = await sanityFetch<IProduct[]>(featuredProductsQuery, { locale }).catch(
     () => [] as IProduct[]
   )
 

@@ -1,11 +1,19 @@
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+// All queries accept $locale ("bg" | "en"). Fields fall back to BG if EN is missing.
+
+const localeName = `select($locale == "en" && defined(name_en) => name_en, name)`
+const localeDesc = `select($locale == "en" && defined(description_en) => description_en, description)`
+const localeCat  = `select($locale == "en" && defined(category->name_en) => category->name_en, category->name)`
+const localeSpec = `"key": select($locale == "en" && defined(definition->label_en) => definition->label_en, definition->label_bg), value`
+
 // ─── Featured hero product (home page — single highlighted product) ───────────
 export const featuredHeroQuery = `
   *[_type == "product" && featured == true && inStock == true]
   | order(powerKW desc) [0] {
     _id,
-    name,
+    "name": ${localeName},
     slug,
-    description,
+    "description": ${localeDesc},
     price,
     oldPrice,
     powerKW,
@@ -14,10 +22,10 @@ export const featuredHeroQuery = `
     phases,
     inStock,
     autoStart,
-    specifications,
+    "specifications": specifications[] { ${localeSpec} },
     "image": images[0].asset->url,
     "imageAlt": images[0].alt,
-    "category": category->name
+    "category": ${localeCat}
   }
 `
 
@@ -26,7 +34,7 @@ export const featuredProductsQuery = `
   *[_type == "product" && featured == true && inStock == true][0...3]
   | order(powerKW asc) {
     _id,
-    name,
+    "name": ${localeName},
     slug,
     price,
     oldPrice,
@@ -37,7 +45,7 @@ export const featuredProductsQuery = `
     autoStart,
     "image": images[0].asset->url,
     "imageAlt": images[0].alt,
-    "category": category->name
+    "category": ${localeCat}
   }
 `
 
@@ -46,7 +54,7 @@ export const allProductsQuery = `
   *[_type == "product" && inStock == true]
   | order(powerKW asc) {
     _id,
-    name,
+    "name": ${localeName},
     slug,
     price,
     oldPrice,
@@ -58,12 +66,12 @@ export const allProductsQuery = `
     autoStart,
     "image": images[0].asset->url,
     "imageAlt": images[0].alt,
-    "category": category->name
+    "category": ${localeCat}
   }
 `
 
 // ─── Filtered products (list page — with searchParams) ────────────────────────
-// Params: $fuelType (string|""), $minKW (number), $maxKW (number), $inStockOnly (bool)
+// Params: $locale, $fuelType (string|""), $minKW (number), $maxKW (number), $inStockOnly (bool)
 export const filteredProductsQuery = `
   *[_type == "product"
     && ($fuelType == "" || fuelType == $fuelType)
@@ -73,7 +81,7 @@ export const filteredProductsQuery = `
   ]
   | order(powerKW asc) {
     _id,
-    name,
+    "name": ${localeName},
     slug,
     price,
     oldPrice,
@@ -85,18 +93,18 @@ export const filteredProductsQuery = `
     autoStart,
     "image": images[0].asset->url,
     "imageAlt": images[0].alt,
-    "category": category->name
+    "category": ${localeCat}
   }
 `
 
 // ─── Single product by slug (detail page) ─────────────────────────────────────
-// Params: $slug (string)
+// Params: $locale, $slug (string)
 export const productBySlugQuery = `
   *[_type == "product" && slug.current == $slug][0] {
     _id,
-    name,
+    "name": ${localeName},
     slug,
-    description,
+    "description": ${localeDesc},
     price,
     oldPrice,
     powerKW,
@@ -105,19 +113,24 @@ export const productBySlugQuery = `
     phases,
     inStock,
     autoStart,
-    specifications,
+    "specifications": specifications[] { ${localeSpec} },
     seoTitle,
     seoDescription,
     "images": images[].asset->url,
     "imageAlts": images[].alt,
-    "category": category->name,
+    "category": ${localeCat},
     "categorySlug": category->slug.current,
     "related": *[_type == "product"
       && fuelType == ^.fuelType
       && slug.current != $slug
       && inStock == true
     ][0...3] {
-      _id, name, slug, price, powerKW, fuelType,
+      _id,
+      "name": ${localeName},
+      slug,
+      price,
+      powerKW,
+      fuelType,
       "image": images[0].asset->url
     }
   }
@@ -129,17 +142,18 @@ export const allProductSlugsQuery = `
 `
 
 // ─── All categories ────────────────────────────────────────────────────────────
+// Params: $locale
 export const categoriesQuery = `
   *[_type == "category"] | order(name asc) {
     _id,
-    name,
+    "name": ${localeCat},
     slug,
     "productCount": count(*[_type == "product" && references(^._id)])
   }
 `
 
 // ─── Product prices (server-side validation — API route use only) ──────────────
-// Params: $ids (array of strings)
+// Params: $ids (array of strings) — no locale needed, prices are language-neutral
 export const productPricesQuery = `
   *[_type == "product" && _id in $ids] {
     _id,

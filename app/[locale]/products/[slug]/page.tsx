@@ -26,9 +26,9 @@ export async function generateStaticParams() {
 type Props = { params: Promise<{ slug: string; locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const t = await getTranslations('metadata')
-  const product = await sanityFetch<IProduct | null>(productBySlugQuery, { slug }).catch(
+  const product = await sanityFetch<IProduct | null>(productBySlugQuery, { slug, locale }).catch(
     () => null
   )
   if (!product) return { title: t('productNotFound') }
@@ -48,12 +48,12 @@ const fuelColors: Record<IProduct['fuelType'], string> = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { slug } = await params
+  const { slug, locale } = await params
   const t = await getTranslations('productDetail')
 
   const product = await sanityFetch<IProduct | null>(
     productBySlugQuery,
-    { slug },
+    { slug, locale },
     3600
   )
 
@@ -353,17 +353,19 @@ export default async function ProductDetailPage({ params }: Props) {
       )}
 
       {/* ── BOTTOM CTA ───────────────────────────────────────────────────── */}
-      <section className="bg-amber px-4 sm:px-8 lg:px-16 py-12 sm:py-16 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-screen-xl mx-auto">
-        <h2 className="font-display text-[32px] sm:text-[40px] leading-[0.93] text-navy-dk">
-          {t('ctaHeading1')}<br />
-          <span className="text-navy/60">{t('ctaHeading2')}</span>
-        </h2>
-        <Link
-          href="/contact"
-          className="shrink-0 flex items-center min-h-[52px] px-8 bg-navy-dk text-white font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-navy hover:-translate-y-0.5"
-        >
-          {t('ctaBtn')}
-        </Link>
+      <section className="bg-amber py-12 sm:py-16">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <h2 className="font-display text-[32px] sm:text-[40px] leading-[0.93] text-navy-dk">
+            {t('ctaHeading1')}<br />
+            <span className="text-navy/60">{t('ctaHeading2')}</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="shrink-0 flex items-center min-h-[52px] px-8 bg-navy-dk text-white font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:bg-navy hover:-translate-y-0.5"
+          >
+            {t('ctaBtn')}
+          </Link>
+        </div>
       </section>
 
     </main>

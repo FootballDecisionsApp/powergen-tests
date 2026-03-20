@@ -18,15 +18,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const href = `/products/${product.slug.current}` as const
 
   const fuelLabel: Record<IProduct['fuelType'], string> = {
-    diesel:   'Дизел',
-    petrol:   'Бензин',
-    gas:      'Газ',
-    inverter: 'Инвертор',
+    diesel:   t('fuelDiesel'),
+    petrol:   t('fuelPetrol'),
+    gas:      t('fuelGas'),
+    inverter: t('fuelInverter'),
   }
 
   const phaseLabel: Record<NonNullable<IProduct['phases']>, string> = {
-    '1phase': '1 фаза',
-    '3phase': '3 фази',
+    '1phase': t('phase1'),
+    '3phase': t('phase3'),
   }
 
   function handleAddToCart(e: React.MouseEvent) {
@@ -106,7 +106,7 @@ export function ProductCard({ product }: ProductCardProps) {
             `${product.powerKW} kW`,
             fuelLabel[product.fuelType],
             ...(product.phases ? [phaseLabel[product.phases]] : []),
-            ...(product.autoStart ? ['Автостарт'] : []),
+            ...(product.autoStart ? [t('autoStart')] : []),
           ].map((spec) => (
             <span key={spec} className="flex items-center gap-1.5 font-mono text-[9px] tracking-[0.15em] uppercase text-ash">
               <span className="w-1 h-1 rounded-full bg-amber shrink-0" />

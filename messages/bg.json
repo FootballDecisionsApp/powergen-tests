@@ -24,7 +24,10 @@
     "privacy": "Поверителност",
     "cookies": "Бисквитки",
     "terms": "Условия",
-    "copyright": "© 2026 PlayCube · Integrated Energy Systems OOD · All rights reserved"
+    "copyright": "© 2026 PlayCube · Integrated Energy Systems OOD · All rights reserved",
+    "address1": "Гр. Плевен",
+    "address2": "Западна индустриална зона",
+    "address3": "ул. „Строител\" № 1"
   },
   "hero": {
     "eyebrow": "Енергийна Сигурност · Since 2003",
@@ -116,7 +119,14 @@
     "added": "✓ Добавено",
     "outOfStock": "Изчерпан",
     "viewProduct": "Виж продукта",
-    "topBadge": "ТОП"
+    "topBadge": "ТОП",
+    "fuelDiesel": "Дизел",
+    "fuelPetrol": "Бензин",
+    "fuelGas": "Газ",
+    "fuelInverter": "Инвертор",
+    "phase1": "1 фаза",
+    "phase3": "3 фази",
+    "autoStart": "Автостарт"
   },
   "productDetail": {
     "notFound": "Продукт не е намерен — PlayCube",

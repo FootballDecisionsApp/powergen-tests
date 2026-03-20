@@ -24,7 +24,10 @@
     "privacy": "Privacy",
     "cookies": "Cookies",
     "terms": "Terms",
-    "copyright": "© 2026 PlayCube · Integrated Energy Systems OOD · All rights reserved"
+    "copyright": "© 2026 PlayCube · Integrated Energy Systems OOD · All rights reserved",
+    "address1": "Pleven",
+    "address2": "Western Industrial Zone",
+    "address3": "1 Stroitel St."
   },
   "hero": {
     "eyebrow": "Energy Security · Since 2003",
@@ -116,7 +119,14 @@
     "added": "✓ Added",
     "outOfStock": "Out of stock",
     "viewProduct": "View product",
-    "topBadge": "TOP"
+    "topBadge": "TOP",
+    "fuelDiesel": "Diesel",
+    "fuelPetrol": "Petrol",
+    "fuelGas": "Gas",
+    "fuelInverter": "Inverter",
+    "phase1": "1-phase",
+    "phase3": "3-phase",
+    "autoStart": "Auto start"
   },
   "productDetail": {
     "notFound": "Product not found — PlayCube",

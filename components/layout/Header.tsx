@@ -33,7 +33,16 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-12 h-[72px] flex items-center justify-between bg-navy/96 backdrop-blur-xl border-b border-amber/[0.15]">
 
         {/* Logo */}
-        <Link href="/" className="flex flex-col leading-none group shrink-0">
+        <Link
+          href="/"
+          className="flex flex-col leading-none group shrink-0"
+          onClick={(e) => {
+            if (pathname === '/') {
+              e.preventDefault()
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
+        >
           <span className="font-display text-[30px] tracking-[0.08em] text-white leading-none transition-colors duration-200 group-hover:text-amber/90">
             PLAYCUBE
           </span>

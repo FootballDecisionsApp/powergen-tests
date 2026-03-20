@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { sanityFetch } from '@/lib/sanity/client'
 import { filteredProductsQuery, allProductsQuery } from '@/lib/sanity/queries'
 import type { IProduct } from '@/types'
@@ -27,6 +27,7 @@ interface ProductsPageProps {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const sp = await searchParams
+  const locale = await getLocale()
 
   const fuelType    = sp.fuelType ?? ''
   const minKW       = Number(sp.minKW) || 0
@@ -37,7 +38,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   const products = await sanityFetch<IProduct[]>(
     hasFilters ? filteredProductsQuery : allProductsQuery,
-    hasFilters ? { fuelType, minKW, maxKW, inStockOnly } : {},
+    hasFilters ? { locale, fuelType, minKW, maxKW, inStockOnly } : { locale },
     3600
   ).catch(() => [] as IProduct[])
 

@@ -14,10 +14,17 @@ export default defineType({
     // ─── Main ─────────────────────────────────────────────────────────────────
     defineField({
       name: 'name',
-      title: 'Наименование',
+      title: 'Наименование (BG)',
       type: 'string',
       group: 'main',
       validation: (Rule) => Rule.required().min(3).max(100),
+    }),
+    defineField({
+      name: 'name_en',
+      title: 'Name (EN)',
+      type: 'string',
+      group: 'main',
+      validation: (Rule) => Rule.min(3).max(100),
     }),
     defineField({
       name: 'slug',
@@ -29,7 +36,14 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Описание',
+      title: 'Описание (BG)',
+      type: 'text',
+      rows: 4,
+      group: 'main',
+    }),
+    defineField({
+      name: 'description_en',
+      title: 'Description (EN)',
       type: 'text',
       rows: 4,
       group: 'main',
@@ -131,11 +145,25 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            defineField({ name: 'key',   type: 'string', title: 'Параметър' }),
-            defineField({ name: 'value', type: 'string', title: 'Стойност' }),
+            defineField({
+              name: 'definition',
+              title: 'Параметър',
+              type: 'reference',
+              to: [{ type: 'specDefinition' }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'value',
+              title: 'Стойност',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
           ],
           preview: {
-            select: { title: 'key', subtitle: 'value' },
+            select: {
+              title:    'definition.label_bg',
+              subtitle: 'value',
+            },
           },
         },
       ],
