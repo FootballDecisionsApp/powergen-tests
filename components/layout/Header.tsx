@@ -120,6 +120,7 @@ export function Header() {
           {/* Get a quote CTA */}
           <Link
             href="/contact"
+            data-cursor-dark
             className="hidden lg:flex items-center min-h-[44px] px-5 bg-amber text-navy-dk font-mono text-[10px] tracking-[0.18em] uppercase font-medium transition-all duration-200 hover:bg-amber-light"
           >
             {t('getQuote')}
