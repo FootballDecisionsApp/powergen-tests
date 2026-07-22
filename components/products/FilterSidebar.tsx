@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { trackEvent } from '@/lib/analytics'
 
 interface FilterSidebarProps {
   currentFuelType: string
@@ -47,20 +48,25 @@ export function FilterSidebar({
   )
 
   function handleFuelType(value: string) {
-    push({ fuelType: currentFuelType === value ? '' : value })
+    const next = currentFuelType === value ? '' : value
+    trackEvent({ name: 'product_filter_applied', props: { filterType: 'fuelType', value: next } })
+    push({ fuelType: next })
   }
 
   function handleInStock(checked: boolean) {
+    trackEvent({ name: 'product_filter_applied', props: { filterType: 'inStock', value: checked } })
     push({ inStock: checked ? 'true' : undefined })
   }
 
   function handleMinKW(e: React.ChangeEvent<HTMLInputElement>) {
     const v = Number(e.target.value)
+    trackEvent({ name: 'product_filter_applied', props: { filterType: 'minKW', value: v } })
     push({ minKW: v > 0 ? v : undefined })
   }
 
   function handleMaxKW(e: React.ChangeEvent<HTMLInputElement>) {
     const v = Number(e.target.value)
+    trackEvent({ name: 'product_filter_applied', props: { filterType: 'maxKW', value: v } })
     push({ maxKW: v > 0 && v < 9999 ? v : undefined })
   }
 

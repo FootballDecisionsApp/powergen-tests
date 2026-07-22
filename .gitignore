@@ -46,3 +46,12 @@ next-env.d.ts
 .vercel
 .claude/worktrees/
 .sanity/
+
+# cloudflare / opennext
+.open-next/
+.wrangler/
+cloudflare-env.d.ts
+.dev.vars
+
+# sanity studio build output
+/dist/

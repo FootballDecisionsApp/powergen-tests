@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Oswald, DM_Sans, DM_Mono } from 'next/font/google'
 import { getLocale } from 'next-intl/server'
+import { CloudflareAnalytics } from '@/components/analytics/CloudflareAnalytics'
+import { PostHogAnalytics } from '@/components/analytics/PostHogAnalytics'
 import '@/app/globals.css'
 
 const oswald = Oswald({
@@ -36,6 +38,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang={locale} className={`${oswald.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body className="antialiased">
         {children}
+        <CloudflareAnalytics />
+        <PostHogAnalytics
+          posthogKey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
+          posthogHost={process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com'}
+        />
       </body>
     </html>
   )

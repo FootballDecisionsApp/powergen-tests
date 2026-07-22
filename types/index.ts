@@ -71,3 +71,14 @@ export interface ICategory {
   slug: { current: string }
   productCount?: number
 }
+
+export interface IChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export interface IChatAnswer {
+  reply: string
+  suggestions?: string[]
+  products?: IProductSummary[]
+}

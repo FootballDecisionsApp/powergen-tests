@@ -9,6 +9,7 @@ import { zodResolver }            from '@hookform/resolvers/zod'
 import Image                      from 'next/image'
 import { useCart }                from '@/lib/store/cart'
 import { OrderCustomerSchema, type TOrderCustomer } from '@/lib/schemas/order'
+import { trackEvent }             from '@/lib/analytics'
 
 // ─── Form field ───────────────────────────────────────────────────────────────
 
@@ -97,6 +98,13 @@ export default function CheckoutPage() {
   const total    = getTotalPrice()
   const freeShip = total > 5000
 
+  useEffect(() => {
+    if (mounted && items.length > 0) {
+      trackEvent({ name: 'checkout_started', props: { itemCount: items.length, total } })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted])
+
   const onSubmit = async (data: TOrderCustomer) => {
     setApiError(null)
     try {
@@ -110,6 +118,10 @@ export default function CheckoutPage() {
       })
       const json: { success?: boolean; orderId?: string; error?: string } = await res.json()
       if (!res.ok) { setApiError(json.error ?? t('errorGeneric')); return }
+      trackEvent({
+        name: 'order_completed',
+        props: { orderId: json.orderId ?? '', total, itemCount: items.length },
+      })
       clearCart()
       router.push(`/checkout/success?orderId=${json.orderId ?? ''}`)
     } catch {

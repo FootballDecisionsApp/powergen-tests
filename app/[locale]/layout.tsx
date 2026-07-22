@@ -5,6 +5,8 @@ import { routing } from '@/i18n/routing'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Cursor } from '@/components/ui/Cursor'
+import { ConsentBanner } from '@/components/analytics/ConsentBanner'
+import { ChatWidget } from '@/components/chat/ChatWidget'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -31,6 +33,8 @@ export default async function LocaleLayout({
       <Header />
       {children}
       <Footer />
+      <ChatWidget />
+      <ConsentBanner />
     </NextIntlClientProvider>
   )
 }

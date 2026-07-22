@@ -6,15 +6,25 @@ Goal: verify the full stack works end-to-end before the real project.
 Scope: Home → Products (with filters) → Product Detail → Cart → Mock Checkout → Success.
 
 ## Stack
-- **Framework**: Next.js 14 (App Router) + TypeScript strict
+- **Framework**: Next.js 16 (App Router) + TypeScript strict — built with Webpack, not Turbopack (see Deployment)
 - **Styling**: Tailwind CSS (utility-first, no CSS modules)
-- **CMS**: Sanity v3 (content + product data)
+- **CMS**: Sanity v3 (content + product data) — Studio is standalone-hosted, not embedded (see Deployment)
 - **State**: Zustand (cart only)
 - **Forms**: React Hook Form + Zod
 - **Fonts**: Cormorant + Barlow Condensed + Barlow + JetBrains Mono (Google Fonts)
-- **Hosting**: Vercel (ISR + Edge)
+- **Hosting**: Cloudflare Workers via the OpenNext adapter (`@opennextjs/cloudflare`) — migrated off Vercel
+- **Domain**: videligo.com (client-purchased; DNS cutover to Cloudflare pending)
 - **Payments**: Mock only — Stripe in real project
 - **Language**: Bulgarian only (no i18n in test)
+
+## Deployment (Cloudflare Workers)
+- Build: `npm run build` runs `next build --webpack`. **Do not switch this back to plain `next build`** — Next 16's default Turbopack output is not yet compatible with `@opennextjs/cloudflare` (`ChunkLoadError` on every route). Revisit when the adapter adds Turbopack support.
+- `npm run preview` — builds and runs the app locally in the real Workers runtime (via Wrangler), not `next dev`. Use this to catch Workers-runtime-only failures.
+- `npm run deploy` — builds and deploys to `https://videligo.<account>.workers.dev` (and later, videligo.com once DNS is cut over).
+- Config lives in `wrangler.jsonc` (bindings, R2 bucket) and `open-next.config.ts` (ISR incremental cache → R2 bucket `videligo-isr-cache`).
+- **Sanity Studio is deployed standalone** at https://videligo.sanity.studio/ via `npx sanity deploy` (config in `sanity.config.ts` / `sanity.cli.ts`) — there is no `/studio` route in the Next.js app. It was removed because the embedded Studio pushed the Worker bundle to ~4.8 MB gzipped, over Cloudflare's 3 MB free-tier limit; standalone hosting keeps the app Worker at ~1.3 MB.
+- Local Cloudflare builds require Windows Developer Mode enabled (symlink permissions) — already on for this machine.
+- Runtime env vars for the Workers runtime come from `.dev.vars` (local, gitignored) and Wrangler bindings/secrets (deployed) — `process.env.NEXT_PUBLIC_*` reads in Server Components do **not** pick up `.env.local` in this runtime the way they do on Vercel/Node.
 
 ## Automatic Rules — Always Apply
 - **ANY UI work** → read `.claude/skills/01-design-system.md` first

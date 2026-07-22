@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useCart } from '@/lib/store/cart'
+import { trackEvent } from '@/lib/analytics'
 
 interface AddToCartSectionProps {
   productId: string
@@ -25,9 +26,15 @@ export function AddToCartSection({
   const [justAdded, setJustAdded] = useState(false)
   const { addItem } = useCart()
 
+  useEffect(() => {
+    trackEvent({ name: 'product_viewed', props: { productId, productName, price } })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productId])
+
   function handleAddToCart() {
     if (!inStock) return
     addItem({ id: productId, name: productName, price, quantity: 1, imageUrl, powerKW })
+    trackEvent({ name: 'product_added_to_cart', props: { productId, productName, price, powerKW } })
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1500)
   }

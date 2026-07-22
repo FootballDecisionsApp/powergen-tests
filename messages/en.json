@@ -29,6 +29,11 @@
     "address2": "Western Industrial Zone",
     "address3": "1 Stroitel St."
   },
+  "cookieConsent": {
+    "message": "We use cookies to analyze site traffic and improve your experience. You can accept or decline at any time.",
+    "accept": "Accept",
+    "reject": "Decline"
+  },
   "hero": {
     "eyebrow": "Energy Security · Since 2003",
     "line1": "RELIABLE",
@@ -189,6 +194,14 @@
     "drawerLabel": "Cart",
     "drawerClose": "Close cart",
     "shippingNote": "Shipping is calculated at checkout"
+  },
+  "chat": {
+    "panelTitle": "Assistant",
+    "openChat": "Open chat",
+    "closeChat": "Close chat",
+    "inputPlaceholder": "Ask a question about our generators...",
+    "send": "Send",
+    "errorGeneric": "Something went wrong. Please try again."
   },
   "checkout": {
     "heading1": "COMPLETE",
