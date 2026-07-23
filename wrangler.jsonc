@@ -7,6 +7,7 @@
   "vars": {
     "NEXT_PUBLIC_SANITY_PROJECT_ID": "76cg4q1s",
     "NEXT_PUBLIC_SANITY_DATASET": "production",
+    "NEXT_PUBLIC_SITE_URL": "https://videligo.com",
     "NEXT_PUBLIC_CF_BEACON_TOKEN": "",
     "NEXT_PUBLIC_POSTHOG_KEY": "",
     "NEXT_PUBLIC_POSTHOG_HOST": "https://eu.i.posthog.com"
@@ -15,6 +16,16 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // Requires videligo.com's DNS to already be delegated to this Cloudflare
+  // account (registrar nameservers -> Cloudflare, zone added in dashboard)
+  // *before* `npm run deploy` — wrangler provisions the custom domain +
+  // certificate automatically once that's done, but can't do the registrar
+  // step itself. Until DNS is cut over, deploys still work at the
+  // *.workers.dev URL and these routes are simply inactive.
+  "routes": [
+    { "pattern": "videligo.com", "custom_domain": true },
+    { "pattern": "www.videligo.com", "custom_domain": true }
+  ],
   "services": [
     { "binding": "WORKER_SELF_REFERENCE", "service": "videligo" }
   ],

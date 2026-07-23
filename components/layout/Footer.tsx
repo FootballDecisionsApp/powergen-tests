@@ -116,19 +116,24 @@ export async function Footer() {
           {t('copyright')}
         </p>
         <div className="flex items-center gap-5">
-          {[
-            { key: 'privacy', label: t('privacy') },
-            { key: 'cookies', label: t('cookies') },
-            { key: 'terms', label: t('terms') },
-          ].map(({ key, label }) => (
-            <a
-              key={key}
-              href="#"
-              className="font-mono text-[10px] tracking-[0.12em] text-white/20 hover:text-white/45 transition-colors duration-150"
-            >
-              {label}
-            </a>
-          ))}
+          <Link
+            href="/privacy"
+            className="font-mono text-[10px] tracking-[0.12em] text-white/20 hover:text-white/45 transition-colors duration-150"
+          >
+            {t('privacy')}
+          </Link>
+          <Link
+            href="/cookies"
+            className="font-mono text-[10px] tracking-[0.12em] text-white/20 hover:text-white/45 transition-colors duration-150"
+          >
+            {t('cookies')}
+          </Link>
+          <Link
+            href="/terms"
+            className="font-mono text-[10px] tracking-[0.12em] text-white/20 hover:text-white/45 transition-colors duration-150"
+          >
+            {t('terms')}
+          </Link>
         </div>
       </div>
     </footer>

@@ -5,6 +5,14 @@ Read this file before creating any API route or form.
 
 ---
 
+## GROQ Injection Safety (audited 2026-07-23)
+
+There is no SQL database anywhere in this stack — only Sanity/GROQ. Verified every query in `lib/sanity/queries.ts` and every call site (`app/[locale]/products/page.tsx`, `app/[locale]/products/[slug]/page.tsx`, `app/api/orders/route.ts`, `app/api/chat/route.ts`): all request-derived values (`fuelType`, `minKW`/`maxKW`, `slug`, `ids`, `locale`) are passed through the `params` object of `client.fetch(query, params)` as `$name` bindings — never string-concatenated into the query text. The only string interpolation in `queries.ts` (`${localeName}`, `${localeCat}`, etc.) composes static GROQ fragments from hardcoded constants at module load, not from user input. Keep new queries on this pattern — never build a GROQ string with template-literal request data.
+
+## Security Headers
+
+CSP/HSTS/X-Frame-Options/etc. are set globally in `next.config.ts` (`headers()`) and mirrored (minus CSP) in `public/_headers` for static assets. Don't add a page-specific override unless a route genuinely needs a different CSP (e.g. embedding a new third-party iframe/script) — extend the shared `securityHeaders` array in `next.config.ts` instead of hardcoding new headers elsewhere.
+
 ## Every API Route Checklist
 
 Before marking an API route as done, verify ALL of these:

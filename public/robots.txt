@@ -8,4 +8,4 @@ Disallow: /en/cart
 Disallow: /bg/checkout
 Disallow: /en/checkout
 
-Sitemap: https://playcube-ies.vercel.app/sitemap.xml
+Sitemap: https://videligo.com/sitemap.xml
