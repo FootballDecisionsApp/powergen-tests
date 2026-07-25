@@ -120,15 +120,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <div>
             {product.oldPrice && (
               <p className="font-mono text-[11px] text-dust line-through mb-0.5">
-                {product.oldPrice.toLocaleString('bg-BG')} лв
+                {product.oldPrice.toLocaleString('bg-BG')} EUR
               </p>
             )}
             <p className="font-display text-[34px] text-navy leading-none tracking-[0.02em]">
               {product.price.toLocaleString('bg-BG')}{' '}
-              <span className="font-sans text-[12px] text-ash font-normal">лв</span>
-            </p>
-            <p className="font-mono text-[10px] text-dust mt-0.5">
-              ≈ {Math.round(product.price / 1.956).toLocaleString('bg-BG')} €
+              <span className="font-sans text-[12px] text-ash font-normal">EUR</span>
             </p>
           </div>
 

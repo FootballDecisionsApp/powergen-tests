@@ -88,7 +88,7 @@ export function ChatWidget() {
         onClick={handleToggle}
         aria-label={open ? t('closeChat') : t('openChat')}
         aria-expanded={open}
-        className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 w-14 h-14 flex items-center justify-center bg-amber text-navy-dk shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-all duration-300 hover:bg-amber-light active:scale-95"
+        className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-[60] w-14 h-14 flex items-center justify-center bg-amber text-navy-dk shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-all duration-300 hover:bg-amber-light active:scale-95"
       >
         {mounted && pulse && !open && (
           <span className="absolute inset-0 -z-10 bg-amber/60 animate-ping" aria-hidden="true" />
@@ -109,7 +109,7 @@ export function ChatWidget() {
         role="dialog"
         aria-modal="false"
         aria-label={t('panelTitle')}
-        className={`fixed z-40 bg-navy flex flex-col transition-all duration-300 ease-out
+        className={`fixed z-[60] bg-navy flex flex-col transition-all duration-300 ease-out
           inset-0
           sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[min(600px,70vh)] sm:border sm:border-white/[0.08]
           ${open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}
