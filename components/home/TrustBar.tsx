@@ -71,7 +71,7 @@ export async function TrustBar() {
 
       {/* ── GOLD CTA BANNER ── */}
       <section className="bg-amber px-4 sm:px-8 lg:px-16 py-16 sm:py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
-        <h2 className="font-display text-[36px] sm:text-[48px] lg:text-[60px] leading-[0.93] text-navy-dk max-w-[580px]">
+        <h2 className="font-display text-[36px] sm:text-[48px] lg:text-[52px] xl:text-[60px] leading-[1.04] text-navy-dk max-w-[680px]">
           {t('ctaBannerHeading1')}<br />{t('ctaBannerHeadingAccent')}
         </h2>
         <Link
