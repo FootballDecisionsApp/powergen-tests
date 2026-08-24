@@ -4,7 +4,7 @@ import { useCallback, useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/lib/navigation'
 
-export type SortOption = 'powerAsc' | 'powerDesc' | 'priceAsc' | 'priceDesc'
+export type SortOption = 'powerAsc' | 'powerDesc' | 'nameAsc' | 'nameDesc'
 
 interface ShopHeroProps {
   currentFuelType: string
@@ -49,8 +49,8 @@ export function ShopHero({
   const sortOptions: { value: SortOption; label: string }[] = [
     { value: 'powerAsc',  label: t('sortPowerAsc') },
     { value: 'powerDesc', label: t('sortPowerDesc') },
-    { value: 'priceAsc',  label: t('sortPriceAsc') },
-    { value: 'priceDesc', label: t('sortPriceDesc') },
+    { value: 'nameAsc',   label: t('sortNameAsc') },
+    { value: 'nameDesc',  label: t('sortNameDesc') },
   ]
 
   const push = useCallback(

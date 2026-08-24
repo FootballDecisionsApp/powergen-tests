@@ -14,15 +14,24 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const VALID_SORTS: SortOption[] = ['powerAsc', 'powerDesc', 'priceAsc', 'priceDesc']
+const VALID_SORTS: SortOption[] = ['powerAsc', 'powerDesc', 'nameAsc', 'nameDesc']
 
-function sortProducts(products: IProduct[], sort: SortOption): IProduct[] {
+// Products are rated in kVA and the cards display kVA, so sort on that and
+// fall back to kW for anything without a kVA rating.
+const rating = (p: IProduct): number => p.powerKVA ?? p.powerKW
+
+// `numeric` so "... 100 kVA" sorts after "... 50 kVA" rather than before it —
+// the model names end in a figure, which a plain string compare gets wrong.
+const byName = (a: IProduct, b: IProduct, locale: string): number =>
+  a.name.localeCompare(b.name, locale, { numeric: true, sensitivity: 'base' })
+
+function sortProducts(products: IProduct[], sort: SortOption, locale: string): IProduct[] {
   return [...products].sort((a, b) => {
     switch (sort) {
-      case 'powerAsc':  return a.powerKW - b.powerKW
-      case 'powerDesc': return b.powerKW - a.powerKW
-      case 'priceAsc':  return (a.price ?? Infinity) - (b.price ?? Infinity)
-      case 'priceDesc': return (b.price ?? -Infinity) - (a.price ?? -Infinity)
+      case 'powerAsc':  return rating(a) - rating(b)
+      case 'powerDesc': return rating(b) - rating(a)
+      case 'nameAsc':   return byName(a, b, locale)
+      case 'nameDesc':  return byName(b, a, locale)
     }
   })
 }
@@ -59,7 +68,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     3600
   ).catch(() => [] as IProduct[])
 
-  const products = sortProducts(raw, sort)
+  const products = sortProducts(raw, sort, locale)
 
   return (
     <div>
