@@ -2,12 +2,15 @@
 
 import { Suspense, useEffect } from 'react'
 import { useSearchParams }     from 'next/navigation'
-import { useTranslations }     from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link }                from '@/lib/navigation'
 import { useCart }             from '@/lib/store/cart'
+import { Breadcrumbs }         from '@/components/ui/Breadcrumbs'
 
 function SuccessContent() {
   const t = useTranslations('success')
+  const tb = useTranslations('breadcrumbs')
+  const locale = useLocale()
   const searchParams = useSearchParams()
   const orderId      = searchParams.get('orderId') ?? ''
   const { clearCart } = useCart()
@@ -49,6 +52,17 @@ function SuccessContent() {
         />
 
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-16 sm:py-24 flex flex-col items-center text-center">
+
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="justify-center mb-10"
+            items={[
+              { label: tb('home'), href: '/' },
+              { label: tb('cart'), href: '/cart' },
+              { label: tb('success') },
+            ]}
+          />
 
           {/* Animated checkmark */}
           <div className="mb-8">

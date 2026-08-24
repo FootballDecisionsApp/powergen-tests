@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect }   from 'react'
-import { useTranslations }        from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useRouter }              from '@/lib/navigation'
 import { Link }                   from '@/lib/navigation'
 import { useForm }                from 'react-hook-form'
@@ -10,6 +10,7 @@ import Image                      from 'next/image'
 import { useCart }                from '@/lib/store/cart'
 import { OrderCustomerSchema, type TOrderCustomer } from '@/lib/schemas/order'
 import { trackEvent }             from '@/lib/analytics'
+import { Breadcrumbs }            from '@/components/ui/Breadcrumbs'
 
 // ─── Form field ───────────────────────────────────────────────────────────────
 
@@ -79,6 +80,8 @@ function Stepper({ labels }: { labels: { cart: string; details: string; confirm:
 
 export default function CheckoutPage() {
   const t = useTranslations('checkout')
+  const tb = useTranslations('breadcrumbs')
+  const locale = useLocale()
   const router  = useRouter()
   const { items, getTotalPrice, clearCart } = useCart()
   const [mounted,  setMounted]  = useState(false)
@@ -145,13 +148,16 @@ export default function CheckoutPage() {
           }}
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-10">
-          <nav className="flex items-center gap-2 mb-5" aria-label="Breadcrumb">
-            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">{t('breadcrumbHome')}</Link>
-            <span className="text-white/15 font-mono text-[9px]">/</span>
-            <Link href="/cart" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">{t('breadcrumbCart')}</Link>
-            <span className="text-white/15 font-mono text-[9px]">/</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">{t('breadcrumbOrder')}</span>
-          </nav>
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-5"
+            items={[
+              { label: tb('home'), href: '/' },
+              { label: tb('cart'), href: '/cart' },
+              { label: tb('checkout') },
+            ]}
+          />
           <h1 className="font-display text-[40px] sm:text-[52px] leading-[0.92] text-white">
             {t('heading1')} <span className="text-amber">{t('headingAccent')}</span>
           </h1>
@@ -263,6 +269,17 @@ export default function CheckoutPage() {
                   t('submitBtn')
                 )}
               </button>
+
+              {/* GDPR Art. 13 — notice at the point the order data is submitted */}
+              <p className="mt-4 font-sans font-light text-[12px] leading-relaxed text-white/35">
+                {t.rich('privacyNotice', {
+                  link: (chunks) => (
+                    <Link href="/privacy" className="text-amber/70 hover:text-amber underline underline-offset-2">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </p>
 
             </form>
           </div>

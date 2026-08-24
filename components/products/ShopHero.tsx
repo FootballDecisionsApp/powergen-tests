@@ -13,6 +13,8 @@ interface ShopHeroProps {
   currentInStock: boolean
   currentSort: SortOption
   productCount: number
+  /** Server-rendered breadcrumb trail, slotted above the heading. */
+  breadcrumbs?: React.ReactNode
 }
 
 function getPowerKey(minKW: number, maxKW: number) {
@@ -30,6 +32,7 @@ export function ShopHero({
   currentInStock,
   currentSort,
   productCount,
+  breadcrumbs,
 }: ShopHeroProps) {
   const t = useTranslations('products')
   const router = useRouter()
@@ -105,6 +108,7 @@ export function ShopHero({
 
       {/* Hero text */}
       <div className="relative px-4 sm:px-8 lg:px-16 pt-14 pb-10">
+        {breadcrumbs && <div className="mb-6">{breadcrumbs}</div>}
         <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
           <span className="w-7 h-px bg-amber shrink-0" />
           {t('eyebrow')}

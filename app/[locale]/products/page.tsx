@@ -5,13 +5,18 @@ import { filteredProductsQuery, allProductsQuery } from '@/lib/sanity/queries'
 import type { IProduct } from '@/types'
 import { ProductGrid } from '@/components/products/ProductGrid'
 import { ShopHero, type SortOption } from '@/components/products/ShopHero'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { buildPageMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
-  return {
+  const locale = await getLocale()
+  return buildPageMetadata({
+    locale,
+    path: '/products',
     title: t('productsTitle'),
     description: t('productsDescription'),
-  }
+  })
 }
 
 const VALID_SORTS: SortOption[] = ['powerAsc', 'powerDesc', 'nameAsc', 'nameDesc']
@@ -51,6 +56,7 @@ interface ProductsPageProps {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const sp = await searchParams
   const locale = await getLocale()
+  const tb = await getTranslations('breadcrumbs')
 
   const fuelType    = sp.fuelType ?? ''
   const minKW       = Number(sp.minKW) || 0
@@ -80,6 +86,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         currentInStock={inStockOnly}
         currentSort={sort}
         productCount={products.length}
+        breadcrumbs={
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            items={[{ label: tb('home'), href: '/' }, { label: tb('products') }]}
+          />
+        }
       />
 
       {/* Product grid */}

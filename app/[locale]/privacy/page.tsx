@@ -1,17 +1,24 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { buildPageMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
-  return {
+  const locale = await getLocale()
+  return buildPageMetadata({
+    locale,
+    path: '/privacy',
     title: t('privacyTitle'),
     description: t('privacyDescription'),
-  }
+  })
 }
 
 export default async function PrivacyPolicyPage() {
   const t = await getTranslations('privacyPolicy')
+  const tb = await getTranslations('breadcrumbs')
+  const locale = await getLocale()
 
   const sections = [
     { heading: t('s1Heading'), body: t('s1Body') },
@@ -23,6 +30,7 @@ export default async function PrivacyPolicyPage() {
     { heading: t('s7Heading'), body: t('s7Body') },
     { heading: t('s8Heading'), body: t('s8Body') },
     { heading: t('s9Heading'), body: t('s9Body') },
+    { heading: t('s10Heading'), body: t('s10Body') },
   ]
 
   return (
@@ -39,6 +47,12 @@ export default async function PrivacyPolicyPage() {
           }}
         />
         <div className="relative max-w-screen-md mx-auto px-4 sm:px-8 py-12 sm:py-16">
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-6"
+            items={[{ label: tb('home'), href: '/' }, { label: tb('privacy') }]}
+          />
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
             {t('eyebrow')}

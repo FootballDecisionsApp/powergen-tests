@@ -3,6 +3,7 @@ import { Oswald, DM_Sans, DM_Mono } from 'next/font/google'
 import { getLocale } from 'next-intl/server'
 import { CloudflareAnalytics } from '@/components/analytics/CloudflareAnalytics'
 import { PostHogAnalytics } from '@/components/analytics/PostHogAnalytics'
+import { SITE_URL } from '@/lib/seo'
 import '@/app/globals.css'
 
 const oswald = Oswald({
@@ -27,6 +28,7 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'PlayCube — Integrated Energy Systems',
   description: 'Industrial generators and integrated energy solutions.',
 }

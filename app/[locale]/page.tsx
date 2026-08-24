@@ -7,13 +7,18 @@ import { Hero } from '@/components/home/Hero'
 import { FeaturedProducts } from '@/components/home/FeaturedProducts'
 import { WhyUs } from '@/components/home/WhyUs'
 import { TrustBar } from '@/components/home/TrustBar'
+import { OrganizationJsonLd } from '@/components/seo/JsonLd'
+import { buildPageMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
-  return {
+  const locale = await getLocale()
+  return buildPageMetadata({
+    locale,
+    path: '',
     title: t('homeTitle'),
     description: t('homeDescription'),
-  }
+  })
 }
 
 export default async function HomePage() {
@@ -24,6 +29,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <OrganizationJsonLd locale={locale} />
       <Hero />
       <FeaturedProducts products={products} />
       <WhyUs />

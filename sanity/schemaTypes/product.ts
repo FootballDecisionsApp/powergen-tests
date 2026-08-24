@@ -174,6 +174,13 @@ export default defineType({
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
+            defineField({
+              name: 'value_en',
+              title: 'Value (EN)',
+              type: 'string',
+              description:
+                'Попълнете само ако стойността съдържа текст на български (напр. "4 (3 линейни, 1 нулева)"). Ако е празно, EN сайтът показва българската стойност.',
+            }),
           ],
           preview: {
             select: {

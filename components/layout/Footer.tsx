@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
+import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton'
 
 export async function Footer() {
   const t = await getTranslations('footer')
@@ -131,6 +132,7 @@ export async function Footer() {
           >
             {t('terms')}
           </Link>
+          <CookieSettingsButton />
         </div>
       </div>
     </footer>

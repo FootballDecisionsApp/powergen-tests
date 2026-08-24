@@ -1,17 +1,24 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { buildPageMetadata } from '@/lib/seo'
 import { ContactForm } from '@/components/contact/ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
-  return {
+  const locale = await getLocale()
+  return buildPageMetadata({
+    locale,
+    path: '/contact',
     title: t('contactTitle'),
     description: t('contactDescription'),
-  }
+  })
 }
 
 export default async function ContactPage() {
   const t = await getTranslations('contact')
+  const tb = await getTranslations('breadcrumbs')
+  const locale = await getLocale()
 
   return (
     <main className="min-h-screen bg-navy-dk pt-[72px]">
@@ -27,6 +34,12 @@ export default async function ContactPage() {
           }}
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-12 sm:py-16">
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-6"
+            items={[{ label: tb('home'), href: '/' }, { label: tb('contact') }]}
+          />
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
             {t('eyebrow')}

@@ -24,7 +24,8 @@
     "copyright": "© 2026 PlayCube · Integrated Energy Systems Ltd. · All rights reserved",
     "address1": "Pleven",
     "address2": "Western Industrial Zone",
-    "address3": "1 Stroitel St."
+    "address3": "1 Stroitel St.",
+    "cookieSettings": "Cookie settings"
   },
   "cookieConsent": {
     "message": "We use cookies to analyze site traffic and improve your experience. You can accept or decline at any time.",
@@ -35,33 +36,35 @@
     "eyebrow": "Legal",
     "heading1": "PRIVACY",
     "headingAccent": "POLICY",
-    "lastUpdated": "Last updated: July 23, 2026",
+    "lastUpdated": "Last updated: 24 August 2026",
     "intro": "Integrated Energy Systems Ltd. (\"PlayCube\", \"we\") respects the privacy of your personal data. This policy explains what data we collect, why, for how long we keep it, and what rights you have under Regulation (EU) 2016/679 (GDPR).",
     "s1Heading": "1. Data controller",
     "s1Body": "Integrated Energy Systems Ltd., registered at Pleven, Western Industrial Zone, 1 Stroitel St., Bulgaria. For any questions about your personal data, contact us at ies@playcube.com or +359 889 57 19 51.",
     "s2Heading": "2. What data we collect",
-    "s2Body": "When you place an order: full name, email, phone, delivery address, city, postal code, and any order notes.\nWhen you browse the site: anonymized visit data, only after consent, through analytics tools — see our Cookie Policy.\nWhen you use the chat assistant: the content of the messages you send it, so we can answer your question.",
+    "s2Body": "When you place an order: full name, email, phone, delivery address, city, postal code, and any order notes.\nWhen you write to us through the contact form: name, email, and the content of your message.\nWhen you browse the site: anonymized visit data, only after consent, through analytics tools — see our Cookie Policy.\nWhen you use the chat assistant: the content of the messages you send it, so we can answer your question.\nAutomatically on every visit: technical logs kept by our hosting provider, which may contain your IP address, browser type, and request time — necessary for the security and correct operation of the site.",
     "s3Heading": "3. Purposes and legal basis",
-    "s3Body": "We process this data to: fulfil an order (performance of a contract, Art. 6(1)(b) GDPR); respond to inquiries via chat or the contact form (legitimate interest); analyze visitor behavior on the site (consent, Art. 6(1)(a)).",
+    "s3Body": "We process this data in order to: fulfil an order (performance of a contract, Art. 6(1)(b) GDPR); answer enquiries sent through chat or the contact form (legitimate interest, Art. 6(1)(f)); maintain the security and availability of the site through technical logs (legitimate interest, Art. 6(1)(f)); analyse visitor behaviour on the site (consent, Art. 6(1)(a)).",
     "s4Heading": "4. Retention period",
-    "s4Body": "Order data is retained for the period required under Bulgarian accounting and tax legislation. Chat correspondence is retained for up to 12 months. Analytics data is retained according to the relevant provider's settings — see our Cookie Policy.",
+    "s4Body": "Order data is retained for the period required under Bulgarian accounting and tax legislation. Contact form enquiries are retained for up to 12 months after the correspondence ends. Messages sent to the chat assistant are not stored — they are processed once, solely to generate the reply. Technical logs kept by the hosting provider are retained for a short technical period under its own policy. Analytics data is retained according to the relevant provider settings — see our Cookie Policy.",
     "s5Heading": "5. Recipients of data",
     "s5Body": "Your data may be processed by service providers who support us: Sanity (content management system), PostHog (analytics, EU region), Cloudflare (hosting and network security). We do not sell or share your personal data with third parties for marketing purposes.",
-    "s6Heading": "6. Your rights",
-    "s6Body": "Under GDPR you have the right to: access your data; rectify inaccurate data; erasure; restriction of processing; data portability; object to processing; withdraw consent at any time. To exercise these rights, email us at ies@playcube.com. You also have the right to lodge a complaint with the Bulgarian Commission for Personal Data Protection (CPDP), www.cpdp.bg.",
-    "s7Heading": "7. Cookies",
-    "s7Body": "The site uses cookies and similar technologies only after your explicit consent. Details are available in our Cookie Policy.",
-    "s8Heading": "8. Data security",
-    "s8Body": "The site is served entirely over HTTPS with TLS encryption. Access to administrative systems is restricted and protected by authentication.",
-    "s9Heading": "9. Changes to this policy",
-    "s9Body": "We may update this policy from time to time. Changes will be published on this page with a new \"last updated\" date.",
-    "cookieLinkText": "Cookie Policy →"
+    "s6Heading": "6. Transfers outside the EEA",
+    "s6Body": "Some of our providers are companies established outside the European Economic Area (Cloudflare and Sanity — USA). Where personal data is transferred outside the EEA, the transfer takes place on the basis of the Standard Contractual Clauses adopted by the European Commission, or another appropriate safeguard under Chapter V of the GDPR. PostHog analytics data is processed in the EU region.",
+    "s7Heading": "7. Your rights",
+    "s7Body": "Under GDPR you have the right to: access your data; rectify inaccurate data; erasure; restriction of processing; data portability; object to processing; withdraw consent at any time. You can withdraw your consent to analytics cookies at any time via the “Cookie settings” link at the bottom of every page. To exercise the remaining rights, email us at ies@playcube.com. You also have the right to lodge a complaint with the Bulgarian Commission for Personal Data Protection (CPDP), www.cpdp.bg.",
+    "s8Heading": "8. Cookies",
+    "s8Body": "The site uses cookies and similar technologies only after your explicit consent. Details are available in our Cookie Policy.",
+    "s9Heading": "9. Data security",
+    "s9Body": "The site is served entirely over HTTPS with TLS encryption. Access to administrative systems is restricted and protected by authentication.",
+    "cookieLinkText": "Cookie Policy →",
+    "s10Heading": "10. Changes to this policy",
+    "s10Body": "We may update this policy from time to time. Changes will be published on this page with a new update date."
   },
   "cookiePolicy": {
     "eyebrow": "Legal",
     "heading1": "COOKIE",
     "headingAccent": "POLICY",
-    "lastUpdated": "Last updated: July 23, 2026",
+    "lastUpdated": "Last updated: 24 August 2026",
     "intro": "This policy explains what cookies and similar storage technologies the PlayCube site uses, and how you can manage your consent.",
     "whatHeading": "What cookies are",
     "whatBody": "Cookies are small text files stored in your browser. We use them — and your browser's local storage — only for the functions described below.",
@@ -87,7 +90,7 @@
     "row4Purpose": "Anonymous visit counter with no cookies and no personal data. Doesn't require consent.",
     "row4Duration": "—",
     "manageHeading": "How to manage your consent",
-    "manageBody": "On your first visit you see a banner letting you accept or decline analytics cookies. To change your choice later, clear your cookies and local storage for this site — the banner will reappear.",
+    "manageBody": "On your first visit you see a banner letting you accept or decline analytics cookies. You can change or withdraw your choice at any time via the “Cookie settings” link at the bottom of every page — the banner will reappear so you can make a new choice.",
     "changesHeading": "Changes to this policy",
     "changesBody": "We may update this policy from time to time. Changes will be published on this page with a new \"last updated\" date.",
     "privacyLinkText": "Privacy Policy →"
@@ -326,7 +329,8 @@
     "priceWithVat": "EUR incl. VAT",
     "editCart": "← Edit cart",
     "errorGeneric": "Error submitting order.",
-    "errorNetwork": "Network error. Check your connection and try again."
+    "errorNetwork": "Network error. Check your connection and try again.",
+    "privacyNotice": "By placing this order you agree that your data will be processed in accordance with our <link>Privacy Policy</link>."
   },
   "success": {
     "loading": "Loading…",
@@ -373,7 +377,8 @@
     "formErrorGeneric": "Error sending message. Please try again.",
     "formErrorNetwork": "Network error. Check your connection and try again.",
     "ctaHeading1": "NEED A",
-    "ctaHeading2": "QUICK RESPONSE?"
+    "ctaHeading2": "QUICK RESPONSE?",
+    "formPrivacyNotice": "By sending this form you agree that your data will be processed in accordance with our <link>Privacy Policy</link>."
   },
   "about": {
     "eyebrow": "Our story",
@@ -455,6 +460,23 @@
     "cookiesTitle": "Cookie Policy — PlayCube",
     "cookiesDescription": "Which cookies the PlayCube site uses and how to manage your consent.",
     "termsTitle": "Terms of Service — PlayCube",
-    "termsDescription": "Terms of service for using the site and purchasing products from PlayCube."
+    "termsDescription": "Terms of service for using the site and purchasing products from PlayCube.",
+    "cartDescription": "Review the products in your cart and continue to checkout.",
+    "checkoutDescription": "Complete your order with PlayCube — Integrated Energy Systems.",
+    "successTitle": "Order received — PlayCube",
+    "successDescription": "Thank you! Your order has been received and we will contact you to confirm it."
+  },
+  "breadcrumbs": {
+    "label": "Breadcrumb",
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "success": "Confirmation",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Terms"
   }
 }

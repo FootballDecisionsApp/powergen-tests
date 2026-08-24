@@ -9,6 +9,9 @@ import type { IProduct } from '@/types'
 import { ImageGallery } from '@/components/products/ImageGallery'
 import { AddToCartSection } from '@/components/products/AddToCartSection'
 import { ProductCard } from '@/components/products/ProductCard'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { ProductJsonLd } from '@/components/seo/JsonLd'
+import { buildPageMetadata, absoluteUrl } from '@/lib/seo'
 
 // ─── Static params ────────────────────────────────────────────────────────────
 
@@ -31,11 +34,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await sanityFetch<IProduct | null>(productBySlugQuery, { slug, locale }).catch(
     () => null
   )
-  if (!product) return { title: t('productNotFound') }
-  return {
+  if (!product) return { title: t('productNotFound'), robots: { index: false, follow: true } }
+  return buildPageMetadata({
+    locale,
+    path: `/products/${slug}`,
     title: product.seoTitle ?? `${product.name} — PlayCube`,
     description: product.seoDescription ?? product.description?.slice(0, 155),
-  }
+    image: product.image,
+  })
 }
 
 const fuelColors: Record<IProduct['fuelType'], string> = {
@@ -51,6 +57,7 @@ const fuelColors: Record<IProduct['fuelType'], string> = {
 export default async function ProductDetailPage({ params }: Props) {
   const { slug, locale } = await params
   const t = await getTranslations('productDetail')
+  const tb = await getTranslations('breadcrumbs')
 
   const product = await sanityFetch<IProduct | null>(
     productBySlugQuery,
@@ -120,6 +127,12 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-navy-dk pt-[72px]">
 
+      <ProductJsonLd
+        product={product}
+        locale={locale}
+        url={absoluteUrl(locale, `/products/${slug}`)}
+      />
+
       {/* ── HERO BANNER ──────────────────────────────────────────────────── */}
       <section className="relative bg-navy-dk overflow-hidden border-b border-amber/[0.08]">
         {/* Grid texture */}
@@ -143,19 +156,16 @@ export default async function ProductDetailPage({ params }: Props) {
 
         <div className="relative px-4 sm:px-8 lg:px-16 py-10 sm:py-14 max-w-screen-xl mx-auto">
           {/* Breadcrumbs */}
-          <nav className="flex items-center gap-2 mb-7" aria-label="Breadcrumb">
-            <Link href="/" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">
-              {t('breadcrumbHome')}
-            </Link>
-            <span className="text-white/15 font-mono text-[9px]">/</span>
-            <Link href="/products" className="font-mono text-[9px] tracking-[0.2em] uppercase text-white/25 hover:text-amber/60 transition-colors">
-              {t('breadcrumbProducts')}
-            </Link>
-            <span className="text-white/15 font-mono text-[9px]">/</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-amber/60">
-              {product.name}
-            </span>
-          </nav>
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-7"
+            items={[
+              { label: tb('home'), href: '/' },
+              { label: tb('products'), href: '/products' },
+              { label: product.name },
+            ]}
+          />
 
           {/* Top row: fuel badge + category */}
           <div className="flex items-center gap-3 mb-4">

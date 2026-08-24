@@ -1,13 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
 import { CartItem } from '@/components/cart/CartItem'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 
 export default function CartPage() {
   const t = useTranslations('cart')
+  const tb = useTranslations('breadcrumbs')
+  const locale = useLocale()
   const { items, getTotalPrice, getTotalItems } = useCart()
   const total     = getTotalPrice()
   const itemCount = getTotalItems()
@@ -57,6 +60,12 @@ export default function CartPage() {
           }}
         />
         <div className="relative max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-10">
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-5"
+            items={[{ label: tb('home'), href: '/' }, { label: tb('cart') }]}
+          />
           <h1 className="font-display text-[40px] sm:text-[52px] leading-[0.92] text-white">
             {t('pageHeading')} <span className="text-amber">({itemCount})</span>
           </h1>

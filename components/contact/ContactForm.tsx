@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ContactMessageSchema, type TContactMessage } from '@/lib/schemas/contact'
 import { trackEvent } from '@/lib/analytics'
+import { Link } from '@/lib/navigation'
 
 export function ContactForm() {
   const t = useTranslations('contact')
@@ -112,6 +113,17 @@ export function ContactForm() {
       >
         {isSubmitting ? t('formSubmitting') : t('formSubmit')}
       </button>
+
+      {/* GDPR Art. 13 — tell people how their data is handled where they hand it over */}
+      <p className="font-sans font-light text-[12px] leading-relaxed text-white/35">
+        {t.rich('formPrivacyNotice', {
+          link: (chunks) => (
+            <Link href="/privacy" className="text-amber/70 hover:text-amber underline underline-offset-2">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
 
       {status === 'success' && (
         <p className="font-mono text-[10px] tracking-[0.1em] text-amber" role="status">

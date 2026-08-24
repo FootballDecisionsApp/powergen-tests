@@ -1,17 +1,24 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { buildPageMetadata } from '@/lib/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
-  return {
+  const locale = await getLocale()
+  return buildPageMetadata({
+    locale,
+    path: '/cookies',
     title: t('cookiesTitle'),
     description: t('cookiesDescription'),
-  }
+  })
 }
 
 export default async function CookiePolicyPage() {
   const t = await getTranslations('cookiePolicy')
+  const tb = await getTranslations('breadcrumbs')
+  const locale = await getLocale()
 
   const rows = [
     { name: t('row1Name'), type: t('row1Type'), purpose: t('row1Purpose'), duration: t('row1Duration') },
@@ -34,6 +41,12 @@ export default async function CookiePolicyPage() {
           }}
         />
         <div className="relative max-w-screen-md mx-auto px-4 sm:px-8 py-12 sm:py-16">
+          <Breadcrumbs
+            locale={locale}
+            label={tb('label')}
+            className="mb-6"
+            items={[{ label: tb('home'), href: '/' }, { label: tb('cookies') }]}
+          />
           <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
             <span className="w-7 h-px bg-amber shrink-0" />
             {t('eyebrow')}

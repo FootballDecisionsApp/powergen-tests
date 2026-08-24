@@ -4,7 +4,7 @@
 const localeName = `select($locale == "en" && defined(name_en) => name_en, name)`
 const localeDesc = `select($locale == "en" && defined(description_en) => description_en, description)`
 const localeCat  = `select($locale == "en" && defined(category->name_en) => category->name_en, category->name)`
-const localeSpec = `"key": select($locale == "en" && defined(definition->label_en) => definition->label_en, definition->label_bg), value`
+const localeSpec = `"key": select($locale == "en" && defined(definition->label_en) => definition->label_en, definition->label_bg), "value": select($locale == "en" && defined(value_en) => value_en, value)`
 
 // ─── Featured hero product (home page — single highlighted product) ───────────
 export const featuredHeroQuery = `
