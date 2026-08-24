@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
 import { trackEvent } from '@/lib/analytics'
 
 interface AddToCartSectionProps {
   productId: string
   productName: string
-  price: number
+  price?: number
+  priceOnRequest?: boolean
   powerKW: number
   imageUrl?: string
   inStock: boolean
@@ -18,6 +20,7 @@ export function AddToCartSection({
   productId,
   productName,
   price,
+  priceOnRequest,
   powerKW,
   imageUrl,
   inStock,
@@ -32,11 +35,31 @@ export function AddToCartSection({
   }, [productId])
 
   function handleAddToCart() {
-    if (!inStock) return
+    if (!inStock || priceOnRequest || price === undefined) return
     addItem({ id: productId, name: productName, price, quantity: 1, imageUrl, powerKW })
     trackEvent({ name: 'product_added_to_cart', props: { productId, productName, price, powerKW } })
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1500)
+  }
+
+  if (priceOnRequest || price === undefined) {
+    return (
+      <div className="flex flex-col sm:flex-row gap-3 mt-6">
+        <Link
+          href="/contact"
+          className="flex-1 flex items-center justify-center min-h-[52px] font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 bg-amber text-navy-dk hover:bg-amber-light hover:-translate-y-0.5"
+        >
+          {t('requestQuote')}
+        </Link>
+        <a
+          href="#specifications"
+          className="flex-1 sm:flex-none min-h-[52px] px-6 border border-white/[0.12] text-white/50 font-mono font-medium text-[11px] tracking-[0.2em] uppercase transition-all duration-200 hover:border-amber/50 hover:text-white/80 flex items-center justify-center gap-1.5"
+        >
+          {t('specsEyebrow')}
+          <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    )
   }
 
   return (

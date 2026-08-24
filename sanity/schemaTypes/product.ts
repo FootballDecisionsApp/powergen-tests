@@ -49,12 +49,27 @@ export default defineType({
       group: 'main',
     }),
     defineField({
+      name: 'priceOnRequest',
+      title: 'Цена по запитване',
+      type: 'boolean',
+      group: 'main',
+      initialValue: false,
+      description: 'Ако е включено, вместо цена се показва "Поискай оферта" и продуктът не може да се добавя в количката.',
+    }),
+    defineField({
       name: 'price',
       title: 'Цена (EUR)',
       type: 'number',
       group: 'main',
-      description: 'Цена в EUR — напр. 7490',
-      validation: (Rule) => Rule.required().min(1),
+      description: 'Цена в EUR — напр. 7490. Оставете празно ако е включено „Цена по запитване“.',
+      validation: (Rule) =>
+        Rule.min(1).custom((price, context) => {
+          const priceOnRequest = (context.parent as { priceOnRequest?: boolean } | undefined)?.priceOnRequest
+          if (!priceOnRequest && (price === undefined || price === null)) {
+            return 'Задължително, освен ако не е включено „Цена по запитване“'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'oldPrice',
@@ -92,10 +107,11 @@ export default defineType({
       group: 'tech',
       options: {
         list: [
-          { title: 'Дизел',      value: 'diesel' },
-          { title: 'Бензин',     value: 'petrol' },
-          { title: 'Газ',        value: 'gas' },
-          { title: 'Инверторен', value: 'inverter' },
+          { title: 'Дизел',       value: 'diesel' },
+          { title: 'Бензин',      value: 'petrol' },
+          { title: 'Газ',         value: 'gas' },
+          { title: 'Инверторен',  value: 'inverter' },
+          { title: 'Регенератор', value: 'regenerator' },
         ],
         layout: 'radio',
       },
@@ -175,6 +191,7 @@ export default defineType({
       title: 'Снимки',
       type: 'array',
       group: 'media',
+      description: 'Оставете празно, докато няма реални продуктови снимки — сайтът показва схематична илюстрация вместо липсваща снимка.',
       of: [
         {
           type: 'image',
@@ -189,7 +206,7 @@ export default defineType({
           ],
         },
       ],
-      validation: (Rule) => Rule.required().min(1),
+      validation: (Rule) => Rule.min(1),
     }),
 
     // ─── SEO ──────────────────────────────────────────────────────────────────
@@ -212,14 +229,15 @@ export default defineType({
 
   preview: {
     select: {
-      title:    'name',
-      subtitle: 'price',
-      media:    'images.0',
+      title:          'name',
+      price:          'price',
+      priceOnRequest: 'priceOnRequest',
+      media:          'images.0',
     },
-    prepare({ title, subtitle, media }: { title?: string; subtitle?: number; media?: string }) {
+    prepare({ title, price, priceOnRequest, media }: { title?: string; price?: number; priceOnRequest?: boolean; media?: string }) {
       return {
         title:    title ?? 'Без наименование',
-        subtitle: subtitle ? `${subtitle} EUR` : 'Без цена',
+        subtitle: priceOnRequest ? 'Цена по запитване' : price ? `${price} EUR` : 'Без цена',
         media,
       }
     },

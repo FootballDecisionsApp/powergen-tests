@@ -24,7 +24,7 @@ export async function TrustBar() {
               className="absolute -top-8 -left-2 font-display text-[160px] leading-none text-amber/[0.05] select-none pointer-events-none"
               aria-hidden="true"
             >
-              20
+              10
             </span>
             <div className="relative">
               <p className="flex items-center gap-3 mb-6 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">

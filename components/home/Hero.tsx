@@ -79,8 +79,6 @@ export function Hero() {
         >
           <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line1')}</span>
           <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-amber  uppercase">{t('line2')}</span>
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line3')}</span>
-          <span className="block text-[56px] sm:text-[72px] lg:text-[68px] xl:text-[88px] text-white uppercase">{t('line4')}</span>
         </h1>
 
         {/* Subtitle */}
@@ -118,7 +116,7 @@ export function Hero() {
           {[
             { num: t('stat1Num'), label: t('stat1Label') },
             { num: t('stat2Num'), label: t('stat2Label') },
-            { num: '5–2000', label: t('stat3Label') },
+            { num: t('stat3Num'), label: t('stat3Label') },
           ].map((stat, i) => (
             <div key={stat.label} className={`flex flex-col py-5 pr-6 lg:pr-7 xl:pr-8 ${i > 0 ? 'pl-6 lg:pl-7 xl:pl-8 border-l border-amber/[0.12]' : ''}`}>
               <span className="font-display text-[34px] text-amber leading-none tracking-[0.02em] mb-1">
@@ -233,20 +231,6 @@ export function Hero() {
           </svg>
 
         </div>{/* end scale container */}
-
-        {/* Data labels — xl only, bottom-right of right column */}
-        <div className="hidden xl:flex absolute bottom-12 right-10 flex-col gap-4">
-          {[
-            { key: t('specProtection'), val: 'CE · ISO 9001' },
-            { key: t('specPower'), val: '5–2000 kW' },
-            { key: t('specWarranty'), val: t('specWarrantyVal') },
-          ].map(({ key, val }) => (
-            <div key={key}>
-              <p className="font-mono text-[8px] tracking-[0.25em] uppercase text-white/20">{key}</p>
-              <p className="font-display text-[18px] text-amber tracking-[0.05em] leading-none mt-0.5">{val}</p>
-            </div>
-          ))}
-        </div>
 
         {/* Vertical badge — xl only, right edge */}
         <p

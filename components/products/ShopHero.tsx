@@ -35,11 +35,8 @@ export function ShopHero({
   const router = useRouter()
 
   const fuelTypes = [
-    { value: '',         label: t('fuelAll') },
-    { value: 'diesel',   label: t('fuelDiesel') },
-    { value: 'gas',      label: t('fuelGas') },
-    { value: 'inverter', label: t('fuelInverter') },
-    { value: 'petrol',   label: t('fuelPetrol') },
+    { value: '',             label: t('fuelAll') },
+    { value: 'regenerator',  label: t('fuelRegenerator') },
   ]
 
   const powerRanges = [

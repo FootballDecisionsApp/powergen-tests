@@ -15,6 +15,7 @@ export const featuredHeroQuery = `
     slug,
     "description": ${localeDesc},
     price,
+    priceOnRequest,
     oldPrice,
     powerKW,
     powerKVA,
@@ -37,6 +38,7 @@ export const featuredProductsQuery = `
     "name": ${localeName},
     slug,
     price,
+    priceOnRequest,
     oldPrice,
     powerKW,
     fuelType,
@@ -57,6 +59,7 @@ export const allProductsQuery = `
     "name": ${localeName},
     slug,
     price,
+    priceOnRequest,
     oldPrice,
     powerKW,
     powerKVA,
@@ -84,6 +87,7 @@ export const filteredProductsQuery = `
     "name": ${localeName},
     slug,
     price,
+    priceOnRequest,
     oldPrice,
     powerKW,
     powerKVA,
@@ -129,6 +133,7 @@ export const productBySlugQuery = `
       "name": ${localeName},
       slug,
       price,
+      priceOnRequest,
       powerKW,
       fuelType,
       "image": images[0].asset->url
@@ -158,6 +163,7 @@ export const productPricesQuery = `
   *[_type == "product" && _id in $ids] {
     _id,
     price,
+    priceOnRequest,
     name,
     inStock
   }

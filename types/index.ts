@@ -3,11 +3,12 @@ export interface IProduct {
   name: string
   slug: { current: string }
   description?: string
-  price: number              // EUR (e.g. 7490)
+  price?: number              // EUR (e.g. 7490) — absent when priceOnRequest is true
+  priceOnRequest?: boolean
   oldPrice?: number
   powerKW: number
   powerKVA?: number
-  fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter'
+  fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter' | 'regenerator'
   phases?: '1phase' | '3phase'
   inStock: boolean
   featured?: boolean
@@ -28,9 +29,10 @@ export interface IProductSummary {
   _id: string
   name: string
   slug: { current: string }
-  price: number
+  price?: number
+  priceOnRequest?: boolean
   powerKW: number
-  fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter'
+  fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter' | 'regenerator'
   image?: string
 }
 

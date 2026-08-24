@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
+import { ContactForm } from '@/components/contact/ContactForm'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata')
@@ -94,9 +95,7 @@ export default async function ContactPage() {
 
             </div>
 
-            <p className="mt-8 font-mono text-[9px] tracking-[0.2em] uppercase text-white/20">
-              {t('workingHours')}
-            </p>
+            <ContactForm />
           </div>
 
           {/* RIGHT — Google Maps */}

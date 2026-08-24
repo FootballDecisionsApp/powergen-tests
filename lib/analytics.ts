@@ -33,11 +33,12 @@ export function shutdownAnalytics(): void {
 }
 
 export type AnalyticsEvent =
-  | { name: 'product_viewed'; props: { productId: string; productName: string; price: number } }
+  | { name: 'product_viewed'; props: { productId: string; productName: string; price?: number } }
   | { name: 'product_added_to_cart'; props: { productId: string; productName: string; price: number; powerKW: number } }
   | { name: 'product_filter_applied'; props: { filterType: 'fuelType' | 'inStock' | 'minKW' | 'maxKW'; value: string | number | boolean } }
   | { name: 'checkout_started'; props: { itemCount: number; total: number } }
   | { name: 'order_completed'; props: { orderId: string; total: number; itemCount: number } }
+  | { name: 'contact_form_submitted'; props: Record<string, never> }
 
 export function trackEvent(event: AnalyticsEvent): void {
   if (!initialized) return

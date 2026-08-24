@@ -33,6 +33,10 @@ export const useCart = create<ICartState>()(
 
       addItem: (item) =>
         set((state) => {
+          // Price-on-request products have no real price and must never enter the cart —
+          // the UI hides the add-to-cart control for them, this is a defensive backstop.
+          if (item.price === undefined || item.price === null) return state
+
           const existing = state.items.find((i) => i.id === item.id)
           if (existing) {
             return {

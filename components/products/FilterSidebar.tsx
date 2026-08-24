@@ -13,10 +13,7 @@ interface FilterSidebarProps {
 }
 
 const fuelTypes = [
-  { value: 'diesel',   label: 'Дизел' },
-  { value: 'petrol',   label: 'Бензин' },
-  { value: 'gas',      label: 'Газ' },
-  { value: 'inverter', label: 'Инверторен' },
+  { value: 'regenerator', label: 'Регенератор' },
 ]
 
 export function FilterSidebar({
@@ -72,10 +69,10 @@ export function FilterSidebar({
 
   return (
     <div className="p-5 flex flex-col gap-6">
-      {/* Fuel type */}
+      {/* Type */}
       <div>
         <p className="font-mono text-[9px] tracking-[2px] uppercase text-dust mb-3 pb-2 border-b border-border">
-          Тип гориво
+          Тип
         </p>
         <div className="flex flex-col gap-1">
           {fuelTypes.map(({ value, label }) => {
@@ -141,7 +138,7 @@ export function FilterSidebar({
       {/* Power range */}
       <div>
         <p className="font-mono text-[9px] tracking-[2px] uppercase text-dust mb-3 pb-2 border-b border-border">
-          Мощност (kW)
+          Мощност (kVA)
         </p>
         <div className="flex items-center gap-2">
           <div className="flex flex-col gap-1 flex-1">

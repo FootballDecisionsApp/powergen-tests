@@ -39,10 +39,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const fuelColors: Record<IProduct['fuelType'], string> = {
-  diesel:   'bg-amber text-navy-dk',
-  petrol:   'bg-white/10 text-white/70 border border-white/20',
-  gas:      'bg-navy text-amber border border-amber/30',
-  inverter: 'bg-navy text-amber border border-amber/30',
+  diesel:      'bg-amber text-navy-dk',
+  petrol:      'bg-white/10 text-white/70 border border-white/20',
+  gas:         'bg-navy text-amber border border-amber/30',
+  inverter:    'bg-navy text-amber border border-amber/30',
+  regenerator: 'bg-amber text-navy-dk',
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -60,10 +61,11 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!product) notFound()
 
   const fuelLabels: Record<IProduct['fuelType'], string> = {
-    diesel:   t('fuelDiesel'),
-    petrol:   t('fuelPetrol'),
-    gas:      t('fuelGas'),
-    inverter: t('fuelInverter'),
+    diesel:      t('fuelDiesel'),
+    petrol:      t('fuelPetrol'),
+    gas:         t('fuelGas'),
+    inverter:    t('fuelInverter'),
+    regenerator: t('fuelRegenerator'),
   }
 
   const phaseLabels: Record<NonNullable<IProduct['phases']>, string> = {
@@ -71,12 +73,16 @@ export default async function ProductDetailPage({ params }: Props) {
     '3phase': t('phase3'),
   }
 
+  const isRegenerator = product.fuelType === 'regenerator'
+
   const subtitleParts: string[] = [fuelLabels[product.fuelType]]
   if (product.phases) subtitleParts.push(phaseLabels[product.phases])
   subtitleParts.push(
-    product.powerKVA
-      ? `${product.powerKW}kW / ${product.powerKVA}kVA`
-      : `${product.powerKW}kW`
+    isRegenerator
+      ? `${product.powerKVA ?? product.powerKW}kVA`
+      : product.powerKVA
+        ? `${product.powerKW}kW / ${product.powerKVA}kVA`
+        : `${product.powerKW}kW`
   )
   const subtitle = subtitleParts.join(' · ')
 
@@ -88,9 +94,11 @@ export default async function ProductDetailPage({ params }: Props) {
   const miniSpecs = [
     {
       key: t('specPower'),
-      value: product.powerKVA
-        ? `${product.powerKW}kW / ${product.powerKVA}kVA`
-        : `${product.powerKW} kW`,
+      value: isRegenerator
+        ? `${product.powerKVA ?? product.powerKW} kVA`
+        : product.powerKVA
+          ? `${product.powerKW}kW / ${product.powerKVA}kVA`
+          : `${product.powerKW} kW`,
     },
     {
       key: t('specPhase'),
@@ -101,7 +109,7 @@ export default async function ProductDetailPage({ params }: Props) {
   ]
 
   const discountPct =
-    product.oldPrice && product.oldPrice > product.price
+    product.oldPrice && product.price !== undefined && product.oldPrice > product.price
       ? Math.round((1 - product.price / product.oldPrice) * 100)
       : null
 
@@ -234,32 +242,43 @@ export default async function ProductDetailPage({ params }: Props) {
             </div>
 
             {/* Price */}
-            <div className="flex items-end gap-4 flex-wrap mb-1">
-              {product.oldPrice && (
-                <p className="font-mono text-[11px] text-white/25 line-through">
-                  {product.oldPrice.toLocaleString('bg-BG')} EUR
-                </p>
-              )}
-              {discountPct !== null && (
-                <span className="px-2.5 py-1 bg-amber/10 border border-amber/25 font-mono text-[9px] text-amber tracking-[0.1em]">
-                  -{discountPct}%
+            {product.priceOnRequest || product.price === undefined ? (
+              <div className="flex items-baseline gap-2 mb-6">
+                <span className="font-display text-[40px] sm:text-[48px] text-amber leading-none">
+                  {t('priceOnRequest')}
                 </span>
-              )}
-            </div>
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="font-display text-[52px] sm:text-[60px] text-amber leading-none">
-                {product.price.toLocaleString('bg-BG')}
-              </span>
-              <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-white/35 mb-1">
-                {t('priceWithVat')}
-              </span>
-            </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-end gap-4 flex-wrap mb-1">
+                  {product.oldPrice && (
+                    <p className="font-mono text-[11px] text-white/25 line-through">
+                      {product.oldPrice.toLocaleString('bg-BG')} EUR
+                    </p>
+                  )}
+                  {discountPct !== null && (
+                    <span className="px-2.5 py-1 bg-amber/10 border border-amber/25 font-mono text-[9px] text-amber tracking-[0.1em]">
+                      -{discountPct}%
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="font-display text-[52px] sm:text-[60px] text-amber leading-none">
+                    {product.price.toLocaleString('bg-BG')}
+                  </span>
+                  <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-white/35 mb-1">
+                    {t('priceWithVat')}
+                  </span>
+                </div>
+              </>
+            )}
 
             {/* Add to cart */}
             <AddToCartSection
               productId={product._id}
               productName={product.name}
               price={product.price}
+              priceOnRequest={product.priceOnRequest}
               powerKW={product.powerKW}
               imageUrl={images[0]}
               inStock={product.inStock}

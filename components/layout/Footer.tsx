@@ -8,10 +8,7 @@ export async function Footer() {
     {
       title: t('products'),
       links: [
-        { label: t('allGenerators'), href: '/products' as const },
-        { label: t('diesel'), href: '/products' as const, query: '?fuelType=diesel' },
-        { label: t('inverter'), href: '/products' as const, query: '?fuelType=inverter' },
-        { label: t('gas'), href: '/products' as const, query: '?fuelType=gas' },
+        { label: t('allProducts'), href: '/products' as const },
       ],
     },
     {

@@ -21,8 +21,8 @@ function sortProducts(products: IProduct[], sort: SortOption): IProduct[] {
     switch (sort) {
       case 'powerAsc':  return a.powerKW - b.powerKW
       case 'powerDesc': return b.powerKW - a.powerKW
-      case 'priceAsc':  return a.price - b.price
-      case 'priceDesc': return b.price - a.price
+      case 'priceAsc':  return (a.price ?? Infinity) - (b.price ?? Infinity)
+      case 'priceDesc': return (b.price ?? -Infinity) - (a.price ?? -Infinity)
     }
   })
 }

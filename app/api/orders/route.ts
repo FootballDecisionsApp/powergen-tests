@@ -14,10 +14,10 @@ export async function POST(req: Request) {
     // 2. Fetch real prices from Sanity — NEVER trust client-submitted prices
     const ids = data.items.map(i => i.productId)
     const sanityProducts = await client.fetch<
-      Pick<IProduct, '_id' | 'price' | 'name' | 'inStock'>[]
+      Pick<IProduct, '_id' | 'price' | 'priceOnRequest' | 'name' | 'inStock'>[]
     >(productPricesQuery, { ids })
 
-    // 3. Validate every ordered product exists and is in stock
+    // 3. Validate every ordered product exists, is in stock, and has a real price
     for (const item of data.items) {
       const product = sanityProducts.find(p => p._id === item.productId)
       if (!product) {
@@ -32,12 +32,18 @@ export async function POST(req: Request) {
           { status: 400 }
         )
       }
+      if (product.priceOnRequest || product.price === undefined) {
+        return NextResponse.json(
+          { error: `${product.name} е с цена по запитване — свържете се с нас за оферта` },
+          { status: 400 }
+        )
+      }
     }
 
     // 4. Calculate real total server-side — client total is ignored
     const total = data.items.reduce((sum, item) => {
       const product = sanityProducts.find(p => p._id === item.productId)!
-      return sum + product.price * item.quantity
+      return sum + product.price! * item.quantity
     }, 0)
 
     // 5. Create mock order (real project: persist to DB + trigger email)

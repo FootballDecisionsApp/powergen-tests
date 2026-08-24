@@ -18,10 +18,11 @@ export function ProductCard({ product }: ProductCardProps) {
   const href = `/products/${product.slug.current}` as const
 
   const fuelLabel: Record<IProduct['fuelType'], string> = {
-    diesel:   t('fuelDiesel'),
-    petrol:   t('fuelPetrol'),
-    gas:      t('fuelGas'),
-    inverter: t('fuelInverter'),
+    diesel:      t('fuelDiesel'),
+    petrol:      t('fuelPetrol'),
+    gas:         t('fuelGas'),
+    inverter:    t('fuelInverter'),
+    regenerator: t('fuelRegenerator'),
   }
 
   const phaseLabel: Record<NonNullable<IProduct['phases']>, string> = {
@@ -31,7 +32,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
-    if (!product.inStock) return
+    if (!product.inStock || product.priceOnRequest || product.price === undefined) return
     addItem({
       id:       product._id,
       name:     product.name,
@@ -69,7 +70,10 @@ export function ProductCard({ product }: ProductCardProps) {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             ) : (
-              <WireframeSVG kw={product.powerKW} />
+              <WireframeSVG
+                value={product.fuelType === 'regenerator' ? (product.powerKVA ?? product.powerKW) : product.powerKW}
+                unit={product.fuelType === 'regenerator' ? 'kVA' : 'kW'}
+              />
             )}
           </div>
 
@@ -103,7 +107,9 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Spec chips */}
         <div className="flex flex-wrap gap-3 mb-5">
           {[
-            `${product.powerKW} ${t('powerUnit')}`,
+            product.fuelType === 'regenerator'
+              ? `${product.powerKVA ?? product.powerKW} kVA`
+              : `${product.powerKW} ${t('powerUnit')}`,
             fuelLabel[product.fuelType],
             ...(product.phases ? [phaseLabel[product.phases]] : []),
             ...(product.autoStart ? [t('autoStart')] : []),
@@ -118,43 +124,53 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price row */}
         <div className="pt-4 flex items-end justify-between border-t border-smoke">
           <div>
-            {product.oldPrice && (
-              <p className="font-mono text-[11px] text-dust line-through mb-0.5">
-                {product.oldPrice.toLocaleString('bg-BG')} EUR
+            {product.priceOnRequest || product.price === undefined ? (
+              <p className="font-display text-[24px] text-navy leading-none tracking-[0.02em]">
+                {t('priceOnRequest')}
               </p>
+            ) : (
+              <>
+                {product.oldPrice && (
+                  <p className="font-mono text-[11px] text-dust line-through mb-0.5">
+                    {product.oldPrice.toLocaleString('bg-BG')} EUR
+                  </p>
+                )}
+                <p className="font-display text-[34px] text-navy leading-none tracking-[0.02em]">
+                  {product.price.toLocaleString('bg-BG')}{' '}
+                  <span className="font-sans text-[12px] text-ash font-normal">EUR</span>
+                </p>
+              </>
             )}
-            <p className="font-display text-[34px] text-navy leading-none tracking-[0.02em]">
-              {product.price.toLocaleString('bg-BG')}{' '}
-              <span className="font-sans text-[12px] text-ash font-normal">EUR</span>
-            </p>
           </div>
 
           {/* Action buttons */}
           <div className="flex items-center gap-1.5">
-            {/* Add to cart */}
-            <button
-              onClick={handleAddToCart}
-              disabled={!product.inStock}
-              aria-label={`${t('addToCart')} ${product.name}`}
-              title={t('addToCart')}
-              className={`w-9 h-9 flex items-center justify-center transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
-                justAdded
-                  ? 'bg-green-700 text-white'
-                  : 'bg-navy text-white hover:bg-amber hover:text-navy-dk'
-              }`}
-            >
-              {justAdded ? (
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              ) : (
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                  <line x1="3" y1="6" x2="21" y2="6"/>
-                  <path d="M16 10a4 4 0 01-8 0"/>
-                </svg>
-              )}
-            </button>
+            {/* Add to cart — hidden for price-on-request products */}
+            {!product.priceOnRequest && product.price !== undefined && (
+              <button
+                onClick={handleAddToCart}
+                disabled={!product.inStock}
+                aria-label={`${t('addToCart')} ${product.name}`}
+                title={t('addToCart')}
+                className={`w-9 h-9 flex items-center justify-center transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed ${
+                  justAdded
+                    ? 'bg-green-700 text-white'
+                    : 'bg-navy text-white hover:bg-amber hover:text-navy-dk'
+                }`}
+              >
+                {justAdded ? (
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 01-8 0"/>
+                  </svg>
+                )}
+              </button>
+            )}
 
             {/* View product */}
             <Link
@@ -175,7 +191,7 @@ export function ProductCard({ product }: ProductCardProps) {
   )
 }
 
-function WireframeSVG({ kw }: { kw: number }) {
+function WireframeSVG({ value, unit }: { value: number; unit: string }) {
   return (
     <svg viewBox="0 0 240 160" fill="none" className="w-full max-w-[200px]">
       <rect x="20" y="50" width="200" height="80" rx="3" stroke="rgba(212,160,23,0.4)" strokeWidth="1.5"/>
@@ -187,7 +203,7 @@ function WireframeSVG({ kw }: { kw: number }) {
       <rect x="65" y="38" width="28" height="12" rx="1" fill="none" stroke="rgba(212,160,23,0.25)" strokeWidth="1"/>
       <line x1="79" y1="38" x2="79" y2="50" stroke="rgba(212,160,23,0.25)" strokeWidth="1"/>
       <text x="120" y="150" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="rgba(212,160,23,0.3)" letterSpacing="1">
-        {kw}kW
+        {value}{unit}
       </text>
     </svg>
   )
