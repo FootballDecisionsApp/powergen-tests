@@ -10,6 +10,7 @@ import {
   matchPowerRange,
   matchPrice,
   matchProductLookup,
+  matchSpecs,
   matchStock,
 } from './intents'
 
@@ -24,6 +25,7 @@ export const ruleEngine: IChatEngine = {
     const matchers = [
       () => matchGreeting(normalized, locale),
       () => matchPowerRange(normalized, products, locale),
+      () => matchSpecs(normalized, products, locale),
       () => matchFuelType(normalized, products, locale),
       () => matchPrice(normalized, products, locale),
       () => matchStock(normalized, products, locale),

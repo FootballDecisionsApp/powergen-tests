@@ -25,12 +25,20 @@ const copy = {
     en: `I can only help with questions about our products, pricing, delivery, warranty and the company. Try one of the suggestions below, or reach us directly at ${CONTACT.email} / ${CONTACT.phone}.`,
   },
   delivery: {
-    bg: 'Доставяме и монтираме предлаганата гама съоръжения на обекта в рамките на цяла България.',
-    en: 'We deliver and install our full equipment range on site anywhere in Bulgaria.',
+    bg: 'Доставяме и монтираме предлаганата гама съоръжения на обекта в рамките на цяла България. Разходите за доставка се договарят индивидуално според тегло, обем и местоположение, а за поръчки над 5000 EUR доставката е безплатна.',
+    en: 'We deliver and install our full equipment range on site anywhere in Bulgaria. Delivery costs are agreed individually based on weight, volume and location, and delivery is free for orders over EUR 5,000.',
   },
   warranty: {
-    bg: 'Всички наши продукти имат минимум 24 месеца пълна гаранция на съоръжението.',
-    en: 'All our products come with a minimum 24-month full warranty on the equipment.',
+    bg: 'Всички продукти се предлагат с 24-месечна търговска гаранция, включваща основните компоненти на съоръжението. Тя не засяга законовата гаранция за съответствие съгласно Закона за защита на потребителите. Предлагаме и гаранционна, и извънгаранционна поддръжка.',
+    en: "All products come with a 24-month commercial warranty covering the unit's main components. This does not affect the statutory guarantee of conformity under Bulgarian consumer-protection law. We offer both in-warranty and out-of-warranty support.",
+  },
+  specsIntro: {
+    bg: 'Ето основните параметри на моделите ни — пълните технически спецификации са на страницата на всеки продукт:',
+    en: 'Here are the key parameters of our models — full technical specifications are on each product page:',
+  },
+  specsNote: {
+    bg: 'Пълните технически спецификации са на страницата на продукта.',
+    en: 'Full technical specifications are on the product page.',
   },
   company: {
     bg: 'ИНТЕГРИРАНИ ЕНЕРГИЙНИ СИСТЕМИ е компания, специализирана в доставката на надеждни решения за захранване за промишлени обекти, болници, центрове за данни и критична инфраструктура в цяла България и региона. Имаме над 10 години опит и над 10 000 kVA инсталирана мощност.',
@@ -62,6 +70,32 @@ const fuelLabelPlural: Record<TChatLocale, Record<IProduct['fuelType'], string>>
   en: { diesel: 'diesel', petrol: 'petrol', gas: 'gas', inverter: 'inverter', regenerator: 'regenerator' },
 }
 
+const phaseLabel: Record<TChatLocale, Record<NonNullable<IProduct['phases']>, string>> = {
+  bg: { '1phase': '1-фазов', '3phase': '3-фазов' },
+  en: { '1phase': '1-phase', '3phase': '3-phase' },
+}
+
+// ─── Power units ──────────────────────────────────────────────────────────
+// Regenerators are sized in kVA and the rest of the range in kW — the product
+// cards pick per product (see components/products/ProductCard.tsx), so the chat
+// has to understand both units and answer in the one the customer asked in.
+
+type TPowerUnit = 'kw' | 'kva'
+
+const POWER_UNIT = '(kva|ква|kw|квт)'
+
+function toUnit(raw: string): TPowerUnit {
+  return /kva|ква/i.test(raw) ? 'kva' : 'kw'
+}
+
+function unitLabel(unit: TPowerUnit): string {
+  return unit === 'kva' ? 'kVA' : 'kW'
+}
+
+function powerIn(p: IProduct, unit: TPowerUnit): number {
+  return unit === 'kva' ? (p.powerKVA ?? p.powerKW) : p.powerKW
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
 function toSummary(p: IProduct): IProductSummary {
@@ -84,10 +118,35 @@ function formatPrice(p: Pick<IProduct, 'price' | 'priceOnRequest'>, locale: TCha
   return `${p.price} EUR`
 }
 
+// Mirrors the product cards: regenerators are shown in kVA, everything else in kW.
+function formatPower(p: IProduct): string {
+  return p.fuelType === 'regenerator'
+    ? `${p.powerKVA ?? p.powerKW} kVA`
+    : `${p.powerKW} kW`
+}
+
 function formatProduct(p: IProduct, locale: TChatLocale): string {
-  const fuel = fuelLabel[locale][p.fuelType]
+  // Regenerator names already start with "Регенератор …", so repeating the fuel
+  // label would read as "Регенератор … — регенератор".
+  const fuel = p.fuelType === 'regenerator' ? '' : `${fuelLabel[locale][p.fuelType]}, `
   const stockNote = p.inStock ? '' : locale === 'bg' ? ' (изчерпан)' : ' (out of stock)'
-  return `${p.name} — ${p.powerKW}kW, ${fuel}, ${formatPrice(p, locale)}${stockNote}`
+  return `${p.name} — ${formatPower(p)}, ${fuel}${formatPrice(p, locale)}${stockNote}`
+}
+
+function formatSpecLine(p: IProduct, locale: TChatLocale): string {
+  const parts = [formatPower(p)]
+  if (p.phases) parts.push(phaseLabel[locale][p.phases])
+  if (p.autoStart) parts.push(locale === 'bg' ? 'автостарт' : 'auto-start')
+  parts.push(formatPrice(p, locale))
+  return `${p.name} — ${parts.join(', ')}`
+}
+
+// The catalog is currently all regenerators, but the schema still allows
+// generators — so the noun follows what actually matched.
+function productNoun(matches: IProduct[], locale: TChatLocale): string {
+  const allRegenerators = matches.every(p => p.fuelType === 'regenerator')
+  if (locale === 'bg') return allRegenerators ? 'Регенератори' : 'Генератори'
+  return allRegenerators ? 'Regenerators' : 'Generators'
 }
 
 function listAnswer(matches: IProduct[], intro: string, locale: TChatLocale): IChatAnswer {
@@ -129,26 +188,38 @@ export function matchPowerRange(
   products: IProduct[],
   locale: TChatLocale
 ): IChatAnswer | null {
-  const under = message.match(/(?:до|под|less than|under|below)\s*(\d{1,4})\s*(?:kw|квт)/i)
-  const over = message.match(/(?:над|повече от|over|above|more than)\s*(\d{1,4})\s*(?:kw|квт)/i)
-  const exact = message.match(/(\d{1,4})\s*(?:kw|квт)/i)
+  const under = message.match(new RegExp(`(?:до|под|less than|under|below)\\s*(\\d{1,4})\\s*${POWER_UNIT}`, 'i'))
+  const over = message.match(new RegExp(`(?:над|повече от|over|above|more than)\\s*(\\d{1,4})\\s*${POWER_UNIT}`, 'i'))
+  const exact = message.match(new RegExp(`(\\d{1,4})\\s*${POWER_UNIT}`, 'i'))
 
   if (under) {
-    const kw = Number(under[1])
-    const matches = products.filter(p => p.powerKW <= kw)
-    const intro = locale === 'bg' ? `Генератори до ${kw}kW:` : `Generators up to ${kw}kW:`
+    const value = Number(under[1])
+    const unit = toUnit(under[2])
+    const matches = products.filter(p => powerIn(p, unit) <= value)
+    const noun = productNoun(matches, locale)
+    const intro = locale === 'bg'
+      ? `${noun} до ${value} ${unitLabel(unit)}:`
+      : `${noun} up to ${value} ${unitLabel(unit)}:`
     return listAnswer(matches, intro, locale)
   }
   if (over) {
-    const kw = Number(over[1])
-    const matches = products.filter(p => p.powerKW >= kw)
-    const intro = locale === 'bg' ? `Генератори над ${kw}kW:` : `Generators over ${kw}kW:`
+    const value = Number(over[1])
+    const unit = toUnit(over[2])
+    const matches = products.filter(p => powerIn(p, unit) >= value)
+    const noun = productNoun(matches, locale)
+    const intro = locale === 'bg'
+      ? `${noun} над ${value} ${unitLabel(unit)}:`
+      : `${noun} over ${value} ${unitLabel(unit)}:`
     return listAnswer(matches, intro, locale)
   }
   if (exact) {
-    const kw = Number(exact[1])
-    const matches = products.filter(p => Math.abs(p.powerKW - kw) <= 2)
-    const intro = locale === 'bg' ? `Генератори около ${kw}kW:` : `Generators around ${kw}kW:`
+    const value = Number(exact[1])
+    const unit = toUnit(exact[2])
+    const matches = products.filter(p => Math.abs(powerIn(p, unit) - value) <= 2)
+    const noun = productNoun(matches, locale)
+    const intro = locale === 'bg'
+      ? `${noun} около ${value} ${unitLabel(unit)}:`
+      : `${noun} around ${value} ${unitLabel(unit)}:`
     return listAnswer(matches, intro, locale)
   }
   return null
@@ -160,6 +231,7 @@ export function matchFuelType(
   locale: TChatLocale
 ): IChatAnswer | null {
   const fuelPatterns: Array<[IProduct['fuelType'], RegExp]> = [
+    ['regenerator', /регенератор|regenerator/i],
     ['diesel', /дизел|diesel/i],
     ['inverter', /инвертор|inverter/i],
     ['gas', /(?<![\p{L}\p{N}])газ(ов)?(?![\p{L}\p{N}])|\bgas\b/iu],
@@ -172,7 +244,10 @@ export function matchFuelType(
   const matches = products.filter(p => p.fuelType === fuelType)
   const label = fuelLabelPlural[locale][fuelType]
   const capitalized = label.charAt(0).toUpperCase() + label.slice(1)
-  const intro = locale === 'bg' ? `${capitalized} генератори:` : `${capitalized} generators:`
+  // "Регенератори" is the noun itself — "Регенератори генератори" would be wrong.
+  const intro = fuelType === 'regenerator'
+    ? locale === 'bg' ? 'Регенераторите, които предлагаме:' : 'The regenerators we offer:'
+    : locale === 'bg' ? `${capitalized} генератори:` : `${capitalized} generators:`
   return listAnswer(matches, intro, locale)
 }
 
@@ -220,7 +295,7 @@ export function matchStock(
   products: IProduct[],
   locale: TChatLocale
 ): IChatAnswer | null {
-  if (!/наличност|наличен|наличв|available|in stock|\bstock\b/i.test(message)) return null
+  if (!/наличн|availab|in stock|\bstock\b/i.test(message)) return null
 
   const named = findNamedProduct(message, products)
   if (named) {
@@ -237,6 +312,27 @@ export function matchStock(
   const inStock = products.filter(p => p.inStock)
   const intro = locale === 'bg' ? 'В наличност в момента:' : 'Currently in stock:'
   return listAnswer(inStock, intro, locale)
+}
+
+export function matchSpecs(
+  message: string,
+  products: IProduct[],
+  locale: TChatLocale
+): IChatAnswer | null {
+  if (!/спецификаци|техническ|характеристик|\bspecs?\b|specification|technical/i.test(message)) return null
+
+  const named = findNamedProduct(message, products)
+  const shown = named ? [named] : products.slice(0, 5)
+  if (shown.length === 0) {
+    return { reply: copy.noneFound[locale], suggestions: suggestions[locale] }
+  }
+
+  const lines = shown.map(p => `• ${formatSpecLine(p, locale)}`)
+  const parts = [named ? '' : copy.specsIntro[locale], lines.join('\n'), copy.specsNote[locale]]
+  return {
+    reply: parts.filter(Boolean).join('\n\n'),
+    products: shown.map(toSummary),
+  }
 }
 
 export function matchProductLookup(

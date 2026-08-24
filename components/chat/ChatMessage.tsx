@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import type { IChatMessage, IProductSummary } from '@/types'
 
@@ -14,6 +15,7 @@ interface ChatMessageProps {
 }
 
 export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
+  const t = useTranslations('chat')
   const isUser = message.role === 'user'
 
   return (
@@ -37,7 +39,9 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
               className="flex items-center justify-between px-3 py-2 border border-white/[0.1] font-mono text-[10px] tracking-[0.1em] uppercase text-white/60 hover:border-amber/50 hover:text-white transition-colors duration-150"
             >
               <span className="truncate">{p.name}</span>
-              <span className="text-amber ml-2 shrink-0">{p.price} EUR</span>
+              <span className="text-amber ml-2 shrink-0">
+                {p.priceOnRequest || p.price == null ? t('priceOnRequest') : `${p.price} EUR`}
+              </span>
             </Link>
           ))}
         </div>

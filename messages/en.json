@@ -291,6 +291,7 @@
     "closeChat": "Close chat",
     "inputPlaceholder": "Ask a question about our products...",
     "send": "Send",
+    "priceOnRequest": "Request a quote",
     "errorGeneric": "Something went wrong. Please try again."
   },
   "checkout": {

@@ -291,6 +291,7 @@
     "closeChat": "Затвори чата",
     "inputPlaceholder": "Задайте въпрос за продуктите ни...",
     "send": "Изпрати",
+    "priceOnRequest": "Поискай оферта",
     "errorGeneric": "Възникна грешка. Опитайте отново."
   },
   "checkout": {
