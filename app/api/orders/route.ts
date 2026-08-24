@@ -32,7 +32,7 @@ export async function POST(req: Request) {
           { status: 400 }
         )
       }
-      if (product.priceOnRequest || product.price === undefined) {
+      if (product.priceOnRequest || product.price == null) {
         return NextResponse.json(
           { error: `${product.name} е с цена по запитване — свържете се с нас за оферта` },
           { status: 400 }

@@ -3,9 +3,11 @@ export interface IProduct {
   name: string
   slug: { current: string }
   description?: string
-  price?: number              // EUR (e.g. 7490) — absent when priceOnRequest is true
-  priceOnRequest?: boolean
-  oldPrice?: number
+  // GROQ returns `null` (not `undefined`) for fields absent on a document, so
+  // these are typed nullable — always compare with `== null`, never `=== undefined`.
+  price?: number | null       // EUR (e.g. 7490) — null when priceOnRequest is true
+  priceOnRequest?: boolean | null
+  oldPrice?: number | null
   powerKW: number
   powerKVA?: number
   fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter' | 'regenerator'
@@ -29,8 +31,8 @@ export interface IProductSummary {
   _id: string
   name: string
   slug: { current: string }
-  price?: number
-  priceOnRequest?: boolean
+  price?: number | null
+  priceOnRequest?: boolean | null
   powerKW: number
   fuelType: 'diesel' | 'petrol' | 'gas' | 'inverter' | 'regenerator'
   image?: string

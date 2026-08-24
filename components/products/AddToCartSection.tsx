@@ -9,8 +9,8 @@ import { trackEvent } from '@/lib/analytics'
 interface AddToCartSectionProps {
   productId: string
   productName: string
-  price?: number
-  priceOnRequest?: boolean
+  price?: number | null
+  priceOnRequest?: boolean | null
   powerKW: number
   imageUrl?: string
   inStock: boolean
@@ -30,19 +30,19 @@ export function AddToCartSection({
   const { addItem } = useCart()
 
   useEffect(() => {
-    trackEvent({ name: 'product_viewed', props: { productId, productName, price } })
+    trackEvent({ name: 'product_viewed', props: { productId, productName, price: price ?? undefined } })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId])
 
   function handleAddToCart() {
-    if (!inStock || priceOnRequest || price === undefined) return
+    if (!inStock || priceOnRequest || price == null) return
     addItem({ id: productId, name: productName, price, quantity: 1, imageUrl, powerKW })
     trackEvent({ name: 'product_added_to_cart', props: { productId, productName, price, powerKW } })
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1500)
   }
 
-  if (priceOnRequest || price === undefined) {
+  if (priceOnRequest || price == null) {
     return (
       <div className="flex flex-col sm:flex-row gap-3 mt-6">
         <Link

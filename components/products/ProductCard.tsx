@@ -32,7 +32,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault()
-    if (!product.inStock || product.priceOnRequest || product.price === undefined) return
+    if (!product.inStock || product.priceOnRequest || product.price == null) return
     addItem({
       id:       product._id,
       name:     product.name,
@@ -124,7 +124,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price row */}
         <div className="pt-4 flex items-end justify-between border-t border-smoke">
           <div>
-            {product.priceOnRequest || product.price === undefined ? (
+            {product.priceOnRequest || product.price == null ? (
               <p className="font-display text-[24px] text-navy leading-none tracking-[0.02em]">
                 {t('priceOnRequest')}
               </p>
@@ -146,7 +146,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Action buttons */}
           <div className="flex items-center gap-1.5">
             {/* Add to cart — hidden for price-on-request products */}
-            {!product.priceOnRequest && product.price !== undefined && (
+            {!product.priceOnRequest && product.price != null && (
               <button
                 onClick={handleAddToCart}
                 disabled={!product.inStock}

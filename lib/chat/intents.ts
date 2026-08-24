@@ -78,7 +78,7 @@ function toSummary(p: IProduct): IProductSummary {
 }
 
 function formatPrice(p: Pick<IProduct, 'price' | 'priceOnRequest'>, locale: TChatLocale): string {
-  if (p.priceOnRequest || p.price === undefined) {
+  if (p.priceOnRequest || p.price == null) {
     return locale === 'bg' ? 'цена по запитване' : 'price on request'
   }
   return `${p.price} EUR`
@@ -188,7 +188,7 @@ export function matchPrice(
   if (!cheapest && !under && !general) return null
 
   // Price-on-request products have no numeric price to sort/filter/range by.
-  const withPrice = products.filter((p): p is IProduct & { price: number } => !p.priceOnRequest && p.price !== undefined)
+  const withPrice = products.filter((p): p is IProduct & { price: number } => !p.priceOnRequest && p.price != null)
 
   if (withPrice.length === 0) {
     return { reply: copy.priceOnRequestOnly[locale], suggestions: suggestions[locale] }

@@ -29,8 +29,8 @@ export function FeaturedHero({ product }: FeaturedHeroProps) {
     s => /гаранц|warrant/i.test(s.key)
   )?.value ?? '2 години'
 
-  const savings     = product.oldPrice && product.price !== undefined ? product.oldPrice - product.price : 0
-  const discountPct = product.oldPrice && product.price !== undefined
+  const savings     = product.oldPrice != null && product.price != null ? product.oldPrice - product.price : 0
+  const discountPct = product.oldPrice != null && product.price != null
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0
 
@@ -40,7 +40,7 @@ export function FeaturedHero({ product }: FeaturedHeroProps) {
   ].filter(Boolean).join(' · ')
 
   function handleAddToCart() {
-    if (product.priceOnRequest || product.price === undefined) return
+    if (product.priceOnRequest || product.price == null) return
     addItem({
       id:       product._id,
       name:     product.name,
@@ -118,11 +118,11 @@ export function FeaturedHero({ product }: FeaturedHeroProps) {
             )}
             <div className="flex items-baseline gap-3">
               <p className="font-serif font-light text-5xl text-black leading-none">
-                {product.priceOnRequest || product.price === undefined
+                {product.priceOnRequest || product.price == null
                   ? 'Поискай оферта'
                   : product.price.toLocaleString('bg-BG')}
               </p>
-              {!(product.priceOnRequest || product.price === undefined) && (
+              {!(product.priceOnRequest || product.price == null) && (
                 <span className="font-cond text-[14px] text-stone">EUR с ДДС</span>
               )}
             </div>

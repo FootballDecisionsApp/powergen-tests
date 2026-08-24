@@ -109,7 +109,7 @@ export default async function ProductDetailPage({ params }: Props) {
   ]
 
   const discountPct =
-    product.oldPrice && product.price !== undefined && product.oldPrice > product.price
+    product.oldPrice != null && product.price != null && product.oldPrice > product.price
       ? Math.round((1 - product.price / product.oldPrice) * 100)
       : null
 
@@ -242,7 +242,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </div>
 
             {/* Price */}
-            {product.priceOnRequest || product.price === undefined ? (
+            {product.priceOnRequest || product.price == null ? (
               <div className="flex items-baseline gap-2 mb-6">
                 <span className="font-display text-[40px] sm:text-[48px] text-amber leading-none">
                   {t('priceOnRequest')}

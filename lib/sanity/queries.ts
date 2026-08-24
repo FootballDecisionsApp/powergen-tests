@@ -110,6 +110,7 @@ export const productBySlugQuery = `
     slug,
     "description": ${localeDesc},
     price,
+    priceOnRequest,
     oldPrice,
     powerKW,
     powerKVA,
