@@ -53,8 +53,12 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
         }}
       />
 
-      {/* EU funding logos — the phone header bar is too narrow to carry them */}
-      <FundingLogos imageClassName="h-10" className="flex absolute top-4 left-4 z-10" />
+      {/* EU funding logos — the phone header bar is too narrow to carry them.
+          Sits below 72px: the header is fixed at z-50 and would paint over them. */}
+      <FundingLogos
+        imageClassName="h-10"
+        className="flex absolute top-[88px] left-1/2 -translate-x-1/2 z-10"
+      />
 
       {/* Close button */}
       <button
