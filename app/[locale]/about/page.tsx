@@ -143,16 +143,6 @@ export default async function AboutPage() {
               </span>
             </div>
           </div>
-
-          {/* Closing statement */}
-          <div className="mt-16 pt-10 border-t border-smoke flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-            <p className="font-display text-[26px] sm:text-[32px] leading-[1.15] text-navy max-w-[640px]">
-              {t('companyGoal')}
-            </p>
-            <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-amber shrink-0 sm:text-right sm:max-w-[240px] leading-relaxed">
-              {t('companyCertified')}
-            </p>
-          </div>
         </div>
       </section>
 
