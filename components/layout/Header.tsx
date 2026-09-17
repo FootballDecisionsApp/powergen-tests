@@ -46,9 +46,8 @@ export function Header() {
             }
           }}
         >
-          {/* Shrunk on phones so the funding logos fit the bar — English renders
-              1.3x larger via the :lang(en) .font-display rule, so it sets the floor. */}
-          <span className="font-display text-[18px] sm:text-[26px] md:text-[30px] tracking-[0.08em] text-white leading-none whitespace-nowrap transition-colors duration-200 group-hover:text-amber/90">
+          {/* brand-mark opts out of the :lang(en) display scaling — see globals.css */}
+          <span className="font-display brand-mark text-[26px] md:text-[30px] tracking-[0.08em] text-white leading-none whitespace-nowrap transition-colors duration-200 group-hover:text-amber/90">
             PLAYCUBE
           </span>
           <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px] whitespace-nowrap">

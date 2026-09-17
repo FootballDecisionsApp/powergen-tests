@@ -66,6 +66,12 @@ html {
   font-size: 1.3em;
 }
 
+/* The brand wordmark is the same Latin string in both languages, so the
+   compensation above would just render it 30% larger on the English site. */
+:lang(en) .font-display.brand-mark {
+  font-size: 1em;
+}
+
 body {
   background: #F5F0E8;
   color: #1B2D4A;
