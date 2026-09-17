@@ -38,7 +38,7 @@ export function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex flex-col leading-none group shrink-0"
+          className="flex flex-col leading-none group min-w-0 overflow-hidden"
           onClick={(e) => {
             if (pathname === '/') {
               e.preventDefault()
@@ -46,10 +46,12 @@ export function Header() {
             }
           }}
         >
-          <span className="font-display text-[30px] tracking-[0.08em] text-white leading-none transition-colors duration-200 group-hover:text-amber/90">
+          {/* Shrunk on phones so the funding logos fit the bar — English renders
+              1.3x larger via the :lang(en) .font-display rule, so it sets the floor. */}
+          <span className="font-display text-[18px] sm:text-[26px] md:text-[30px] tracking-[0.08em] text-white leading-none whitespace-nowrap transition-colors duration-200 group-hover:text-amber/90">
             PLAYCUBE
           </span>
-          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px]">
+          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px] whitespace-nowrap">
             By Integrated Energy Systems
           </span>
         </Link>
@@ -77,8 +79,8 @@ export function Header() {
         {/* Right actions */}
         <div className="flex items-center gap-2 sm:gap-3">
 
-          {/* EU funding logos — no room for them on phones, so MobileNav carries them there */}
-          <FundingLogos className="hidden sm:flex shrink-0" />
+          {/* EU funding logos — visible at every width, including phones */}
+          <FundingLogos className="flex shrink-0" />
 
           {/* Language switcher */}
           <div className="hidden lg:flex items-center border border-white/[0.12]">

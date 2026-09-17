@@ -16,13 +16,15 @@ interface FundingLogosProps {
  * light plate instead of sitting directly on the navy chrome.
  */
 export function FundingLogos({
-  imageClassName = 'h-8 xl:h-9',
+  imageClassName = 'h-7 sm:h-8 xl:h-9',
   className = '',
 }: FundingLogosProps) {
   const t = useTranslations('project')
 
   return (
-    <div className={`items-center gap-2.5 xl:gap-3 bg-paper px-2.5 xl:px-3 py-1.5 ${className}`}>
+    <div
+      className={`items-center gap-2 sm:gap-2.5 xl:gap-3 bg-paper px-2 sm:px-2.5 xl:px-3 py-1 sm:py-1.5 ${className}`}
+    >
       <Image
         src="/eu/playcube-logo-eu.png"
         alt={t('logoEuAlt')}
