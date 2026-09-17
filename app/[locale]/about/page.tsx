@@ -28,6 +28,13 @@ export default async function AboutPage() {
   const stats = [
     { num: t('stat1Num'), label: t('stat1Label') },
     { num: t('stat2Num'), label: t('stat2Label') },
+    { num: t('stat3Num'), label: t('stat3Label') },
+  ]
+
+  const pillars = [
+    { n: '01', title: t('pillar1Title'), body: t('pillar1Body') },
+    { n: '02', title: t('pillar2Title'), body: t('pillar2Body') },
+    { n: '03', title: t('pillar3Title'), body: t('pillar3Body') },
   ]
 
   return (
@@ -69,10 +76,10 @@ export default async function AboutPage() {
       {/* ── STATS BAR ── */}
       <section className="bg-navy border-y border-amber/[0.1]">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16">
-          <div className="grid grid-cols-2 divide-x divide-amber/[0.1] max-w-lg mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-amber/[0.1] max-w-3xl mx-auto">
             {stats.map(({ num, label }) => (
-              <div key={label} className="flex flex-col items-center py-10 px-6 text-center">
-                <span className="font-display text-[44px] text-amber leading-none mb-1">{num}</span>
+              <div key={label} className="flex flex-col items-center py-8 sm:py-10 px-6 text-center">
+                <span className="font-display text-[38px] sm:text-[44px] text-amber leading-none mb-1 whitespace-nowrap">{num}</span>
                 <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-white/35">{label}</span>
               </div>
             ))}
@@ -83,8 +90,8 @@ export default async function AboutPage() {
       {/* ── COMPANY ── */}
       <section className="bg-cream py-20 sm:py-24 px-4 sm:px-8 lg:px-16">
         <div className="max-w-screen-xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 lg:items-end">
+            <div className="lg:col-span-6">
               <p className="flex items-center gap-3 mb-5 font-mono text-[10px] tracking-[0.3em] uppercase text-amber">
                 <span className="w-7 h-px bg-amber shrink-0" />
                 {t('companyEyebrow')}
@@ -93,16 +100,24 @@ export default async function AboutPage() {
                 {t('companyHeading1')}<br />
                 <span className="text-amber">{t('companyHeadingAccent')}</span>
               </h2>
-              <p className="mt-8 border-l-2 border-amber pl-5 font-sans font-light text-[15px] text-stone leading-relaxed">
+            </div>
+
+            <div className="lg:col-span-6">
+              <p className="font-sans font-light text-[16px] sm:text-[17px] text-stone leading-relaxed max-w-[440px] lg:ml-auto">
                 {t('companyLead')}
               </p>
             </div>
+          </div>
 
-            <div className="lg:col-span-7 flex flex-col gap-5">
-              <p className="font-sans font-light text-[14px] text-stone leading-relaxed">{t('companyBody1')}</p>
-              <p className="font-sans font-light text-[14px] text-stone leading-relaxed">{t('companyBody2')}</p>
-              <p className="font-sans font-light text-[14px] text-stone leading-relaxed">{t('companyBody3')}</p>
-            </div>
+          {/* Pillars */}
+          <div className="mt-14 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+            {pillars.map(({ n, title, body }) => (
+              <div key={n} className="border-t border-navy/15 pt-6">
+                <span className="font-mono text-[10px] tracking-[0.25em] text-amber">{n}</span>
+                <h3 className="mt-3 mb-2 font-display text-[22px] text-navy leading-[1.15]">{title}</h3>
+                <p className="font-sans font-light text-[13px] text-stone leading-relaxed">{body}</p>
+              </div>
+            ))}
           </div>
 
           {/* Flagship product */}
