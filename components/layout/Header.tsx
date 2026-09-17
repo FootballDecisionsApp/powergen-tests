@@ -23,6 +23,7 @@ export function Header() {
     { href: '/' as const, label: t('home') },
     { href: '/products' as const, label: t('catalog') },
     { href: '/about' as const, label: t('about') },
+    { href: '/project' as const, label: t('project') },
     { href: '/contact' as const, label: t('contact') },
   ]
 
@@ -50,13 +51,14 @@ export function Header() {
           <span className="font-display brand-mark text-[26px] md:text-[30px] tracking-[0.08em] text-white leading-none whitespace-nowrap transition-colors duration-200 group-hover:text-amber/90">
             PLAYCUBE
           </span>
-          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px] whitespace-nowrap">
+          {/* Hidden across the laptop band (1024-1535): that is where the five-item nav needs the room */}
+          <span className="hidden sm:block lg:hidden 2xl:block font-mono text-[10px] tracking-[0.22em] uppercase text-amber mt-[3px] whitespace-nowrap">
             By Integrated Energy Systems
           </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-9" aria-label="Main navigation">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8" aria-label="Main navigation">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -114,7 +116,8 @@ export function Header() {
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
-            <span className="hidden sm:inline">{t('cart')}</span>
+            {/* Icon-only across the laptop band — same width squeeze as the tagline above */}
+            <span className="hidden sm:inline lg:hidden 2xl:inline">{t('cart')}</span>
             {mounted && totalItems > 0 && (
               <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber text-navy font-mono text-[10px] font-bold flex items-center justify-center">
                 {totalItems}

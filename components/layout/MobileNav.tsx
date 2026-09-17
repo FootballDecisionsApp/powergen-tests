@@ -19,6 +19,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
     { href: '/' as const, label: t('home') },
     { href: '/products' as const, label: t('catalog') },
     { href: '/about' as const, label: t('about') },
+    { href: '/project' as const, label: t('project') },
     { href: '/contact' as const, label: t('contact') },
   ]
 
@@ -64,7 +65,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
       </button>
 
       {/* Nav links */}
-      <nav className="relative z-10 flex flex-col items-center gap-2" aria-label="Mobile navigation">
+      <nav className="relative z-10 flex flex-col items-center gap-2 px-4 text-center" aria-label="Mobile navigation">
         {navLinks.map((item, i) => (
           <Link
             key={item.href}
