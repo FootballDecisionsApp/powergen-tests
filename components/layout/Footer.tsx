@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
 import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton'
+import { FundingLogos } from './FundingLogos'
 
 export async function Footer() {
   const t = await getTranslations('footer')
@@ -110,16 +111,22 @@ export async function Footer() {
       </div>
 
       {/* EU funding disclosure — required on every page of the funded store */}
-      <div className="relative flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8 pb-8 border-b border-white/[0.06]">
-        <p className="font-sans font-light text-[12px] leading-relaxed text-white/30 max-w-[760px]">
-          {t('euStrip')}
-        </p>
-        <Link
-          href="/project"
-          className="shrink-0 font-mono text-[10px] tracking-[0.2em] uppercase text-amber hover:text-amber-light transition-colors duration-150"
-        >
-          {t('euStripLink')} →
-        </Link>
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-7 mb-8 pb-8 border-b border-white/[0.06]">
+        <FundingLogos
+          imageClassName="h-11 sm:h-12"
+          className="flex shrink-0 self-start sm:self-center"
+        />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+          <p className="font-sans font-light text-[12px] leading-relaxed text-white/30 max-w-[620px]">
+            {t('euStrip')}
+          </p>
+          <Link
+            href="/project"
+            className="shrink-0 font-mono text-[10px] tracking-[0.2em] uppercase text-amber hover:text-amber-light transition-colors duration-150"
+          >
+            {t('euStripLink')} →
+          </Link>
+        </div>
       </div>
 
       {/* Bottom bar */}

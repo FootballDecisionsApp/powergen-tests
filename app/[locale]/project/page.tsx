@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
@@ -89,6 +90,36 @@ export default async function ProjectPage() {
               </div>
             ))}
           </dl>
+        </div>
+      </section>
+
+      {/* ── FUNDING LOGOS ── */}
+      {/* Both files carry a baked-in white background, so they need a light band. */}
+      <section className="bg-paper border-b border-smoke px-4 sm:px-8 lg:px-12 py-8 sm:py-10">
+        <div className="max-w-screen-lg mx-auto flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+          <div className="flex items-center gap-5 sm:gap-7 shrink-0">
+            <Image
+              src="/eu/playcube-logo-eu.png"
+              alt={t('logoEuAlt')}
+              width={186}
+              height={170}
+              className="h-16 sm:h-20 w-auto"
+              unoptimized
+              priority
+            />
+            <Image
+              src="/eu/playcube-logo-program.png"
+              alt={t('logoProgrammeAlt')}
+              width={217}
+              height={158}
+              className="h-16 sm:h-20 w-auto"
+              unoptimized
+              priority
+            />
+          </div>
+          <p className="font-sans font-light text-[13px] leading-relaxed text-stone max-w-[440px]">
+            {t('logosCaption')}
+          </p>
         </div>
       </section>
 

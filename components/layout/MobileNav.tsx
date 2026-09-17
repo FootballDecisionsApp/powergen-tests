@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocale } from 'next-intl'
 import { Link, usePathname } from '@/lib/navigation'
+import { FundingLogos } from './FundingLogos'
 
 interface MobileNavProps {
   open: boolean
@@ -51,6 +52,9 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
           backgroundSize: '48px 48px',
         }}
       />
+
+      {/* EU funding logos — the phone header bar is too narrow to carry them */}
+      <FundingLogos imageClassName="h-10" className="flex absolute top-4 left-4 z-10" />
 
       {/* Close button */}
       <button

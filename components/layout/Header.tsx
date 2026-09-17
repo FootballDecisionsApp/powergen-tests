@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl'
 import { Link, usePathname } from '@/lib/navigation'
 import { useCart } from '@/lib/store/cart'
 import { MobileNav } from './MobileNav'
+import { FundingLogos } from './FundingLogos'
 import { CartDrawer } from '@/components/cart/CartDrawer'
 
 export function Header() {
@@ -54,7 +55,7 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-9" aria-label="Main navigation">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-9" aria-label="Main navigation">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -75,6 +76,9 @@ export function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+
+          {/* EU funding logos — no room for them on phones, so MobileNav carries them there */}
+          <FundingLogos className="hidden sm:flex shrink-0" />
 
           {/* Language switcher */}
           <div className="hidden lg:flex items-center border border-white/[0.12]">
@@ -117,11 +121,11 @@ export function Header() {
             )}
           </button>
 
-          {/* Get a quote CTA */}
+          {/* Get a quote CTA — xl and up: below that the funding logos take the room */}
           <Link
             href="/contact"
             data-cursor-dark
-            className="hidden lg:flex items-center min-h-[44px] px-5 bg-amber text-navy-dk font-mono text-[10px] tracking-[0.18em] uppercase font-medium transition-all duration-200 hover:bg-amber-light"
+            className="hidden xl:flex items-center min-h-[44px] px-5 bg-amber text-navy-dk font-mono text-[10px] tracking-[0.18em] uppercase font-medium transition-all duration-200 hover:bg-amber-light"
           >
             {t('getQuote')}
           </Link>
