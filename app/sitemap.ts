@@ -5,7 +5,7 @@ import { allProductSlugsQuery } from '@/lib/sanity/queries'
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://videligo.com'
 const LOCALES = ['bg', 'en'] as const
 
-const staticRoutes = ['', '/products', '/about', '/contact', '/privacy', '/cookies', '/terms']
+const staticRoutes = ['', '/products', '/about', '/project', '/contact', '/privacy', '/cookies', '/terms']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await sanityFetch<{ slug: string }[]>(allProductSlugsQuery, {}, 3600).catch(

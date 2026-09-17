@@ -18,6 +18,7 @@ export async function Footer() {
         { label: t('home'), href: '/' as const },
         { label: t('catalog'), href: '/products' as const },
         { label: t('contact'), href: '/contact' as const },
+        { label: t('project'), href: '/project' as const },
       ],
     },
     {
@@ -106,6 +107,19 @@ export async function Footer() {
             </ul>
           </div>
         ))}
+      </div>
+
+      {/* EU funding disclosure — required on every page of the funded store */}
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-8 pb-8 border-b border-white/[0.06]">
+        <p className="font-sans font-light text-[12px] leading-relaxed text-white/30 max-w-[760px]">
+          {t('euStrip')}
+        </p>
+        <Link
+          href="/project"
+          className="shrink-0 font-mono text-[10px] tracking-[0.2em] uppercase text-amber hover:text-amber-light transition-colors duration-150"
+        >
+          {t('euStripLink')} →
+        </Link>
       </div>
 
       {/* Bottom bar */}

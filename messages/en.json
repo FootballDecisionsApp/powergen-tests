@@ -25,7 +25,10 @@
     "address1": "Pleven",
     "address2": "Western Industrial Zone",
     "address3": "1 Stroitel St.",
-    "cookieSettings": "Cookie settings"
+    "cookieSettings": "Cookie settings",
+    "project": "About the project",
+    "euStrip": "This online store was created under project No. BG16RFPR001-1.004-2828-C01, financed by the Programme “Competitiveness and Innovation in Enterprises” 2021-2027.",
+    "euStripLink": "More about the project"
   },
   "cookieConsent": {
     "message": "We use cookies to analyze site traffic and improve your experience. You can accept or decline at any time.",
@@ -444,6 +447,33 @@
     "industry7": "Data Centres",
     "industry8": "Public Sector"
   },
+  "project": {
+    "eyebrow": "European funding",
+    "kicker": "This online store was created under",
+    "projectNumber": "Project No. BG16RFPR001-1.004-2828-C01",
+    "heading": "Improving the production capacity and optimising the business processes of Integrated Energy Systems Ltd.",
+    "factsLabel": "Project details",
+    "fact1Label": "Beneficiary",
+    "fact1Value": "Integrated Energy Systems Ltd.",
+    "fact2Label": "Grant agreement No.",
+    "fact2Value": "BG16RFPR001-1.004-2828-C01",
+    "fact3Label": "Programme",
+    "fact3Value": "“Competitiveness and Innovation in Enterprises” 2021-2027",
+    "fact4Label": "Place of implementation",
+    "fact4Value": "Pleven, Bulgaria",
+    "intro": "Integrated Energy Systems Ltd. is implementing a project under Grant Agreement No. BG16RFPR001-1.004-2828-C01 for financial support under the Programme “Competitiveness and Innovation in Enterprises” 2021-2027.",
+    "body1": "Under the project, long-term tangible production assets have been acquired – specialised machinery and equipment that will enable the complete in-house manufacturing of the Operating Voltage and Operating Phase Regenerator and will optimise external supplies. The project is expected to improve the production capacity and optimise the business processes of Integrated Energy Systems Ltd. This will increase our competitiveness and strengthen our market presence in establishing our core product – the Operating Voltage and Operating Phase Regenerator – on the market.",
+    "storeHeading": "This online store",
+    "body2": "This online store was developed as part of the project. Through it, the company expects to improve its market presence by developing its sales channels and reaching customer target groups that are new to the company, in order to find the shortest route to market through direct sales.",
+    "objectivesHeading": "The specific objectives of the project are:",
+    "objective1": "To improve the production capacity and optimise the business processes of our family enterprise and thereby contribute to increasing the competitiveness and strengthening the market presence of Integrated Energy Systems Ltd.",
+    "objective2": "To create sustainable employment by the end of the three-year period following the completion of the project and to secure opportunities for growth.",
+    "regionHeading": "Regional impact",
+    "closing": "The company operates in a specific field – “Manufacture of other electrical equipment” – which is of exceptional importance for the region and will help address European and regional challenges. The company is registered in and will carry out its activities in Pleven, located in a region with above-average unemployment for the country and with considerably lower development indicators – a region identified in the National Strategy as a target for focused support and intervention aimed at catching up with the more developed regions in Bulgaria and the EU.",
+    "ctaHeading": "Explore the product this project is bringing to market",
+    "ctaProducts": "Browse the catalog",
+    "ctaContact": "Get in touch"
+  },
   "metadata": {
     "homeTitle": "PlayCube — Integrated Energy Systems",
     "homeDescription": "Secure energy and energy efficiency. Voltage and phase regenerators for industrial and critical facilities.",
@@ -465,7 +495,9 @@
     "cartDescription": "Review the products in your cart and continue to checkout.",
     "checkoutDescription": "Complete your order with PlayCube — Integrated Energy Systems.",
     "successTitle": "Order received — PlayCube",
-    "successDescription": "Thank you! Your order has been received and we will contact you to confirm it."
+    "successDescription": "Thank you! Your order has been received and we will contact you to confirm it.",
+    "projectTitle": "About the project — PlayCube",
+    "projectDescription": "Project No. BG16RFPR001-1.004-2828-C01 of Integrated Energy Systems Ltd. under the Programme “Competitiveness and Innovation in Enterprises” 2021-2027."
   },
   "breadcrumbs": {
     "label": "Breadcrumb",
@@ -478,6 +510,7 @@
     "success": "Confirmation",
     "privacy": "Privacy",
     "cookies": "Cookies",
-    "terms": "Terms"
+    "terms": "Terms",
+    "project": "About the project"
   }
 }
